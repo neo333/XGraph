@@ -5,9 +5,8 @@
 #include <string>
 #include <SDL/SDL.h>
 #include <cmath>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI Cache{
+class Cache{
 private:
 	static const Uint32 decadiment_frequency;
 	const Page _internal_page;

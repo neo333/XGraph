@@ -5,9 +5,8 @@
 #include <string>
 #include <XGraph/FileSystem/HardDisk.h>
 #include <XGraph/GuiSystem/Color.h>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI Texture{
+class Texture{
 public:		//COSTRUTTORI E CARICAMENTO
 	Texture(SDL_Surface* pinit=NULL):mp_surface(pinit){
 
@@ -131,6 +130,10 @@ public:		//METODI DI GET&SET
 
 public:		//OPERATORI
 	operator SDL_Surface*(void){
+		return this->mp_surface;
+	}
+
+	operator const SDL_Surface*(void) const{
 		return this->mp_surface;
 	}
 

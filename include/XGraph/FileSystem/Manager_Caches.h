@@ -4,9 +4,8 @@
 #include <XGraph/FileSystem/Cache.h>
 #include <cassert>
 #include <map>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI Manager_Caches{
+class Manager_Caches{
 public:		//INTERFACCIA
 	static Manager_Caches& Get_Instance(void){
 		if(Manager_Caches::m_pInstance==NULL){

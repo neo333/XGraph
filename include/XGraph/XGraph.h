@@ -1,6 +1,8 @@
-#ifndef __XGRAPH_LIBRARY
-#define __XGRAPH_LIBRARY
+#ifndef __XGRAPH__LIBRARY
+#define __XGRAPH__LIBRARY
 
-#include <XGraph/GuiSystem/Image.h>
+#include <XGraph/GuiSystem/OutVideo.h>
+#include <XGraph/GuiSystem/XG_Window.h>
+#include <XGraph/GuiSystem/XG_ManagerGUI.h>
 
 #endif

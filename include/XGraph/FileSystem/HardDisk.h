@@ -5,10 +5,9 @@
 #include <string>
 #include <cstdio>
 #include <XGraph/FileSystem/Page.h>
-#include <XGraph/_begin.h>
 
 
-class XGRAPH_DLLAPI HardDisk{
+class HardDisk{
 public:		//INTERFACCIA
 	static HardDisk& Get_Instance(void){
 		if(HardDisk::m_pInstance==NULL){

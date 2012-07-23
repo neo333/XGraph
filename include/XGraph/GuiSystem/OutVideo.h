@@ -3,9 +3,9 @@
 
 #include <XGraph/GuiSystem/Texture.h>
 #include <cassert>
-#include <XGraph/_begin.h>
+#include <SDL/SDL_gfxPrimitives.h>
 
-struct XGRAPH_DLLAPI Setting_Window{
+struct Setting_Window{
 	int width;
 	int height;
 	int bpp;
@@ -19,7 +19,7 @@ struct XGRAPH_DLLAPI Setting_Window{
 
 class Image;
 
-class XGRAPH_DLLAPI OutVideo{
+class OutVideo{
 
 public:		//INTERFACCIA
 	/*Ritorna il singleton della classe.
@@ -82,6 +82,10 @@ public:		//METODI GET&SET
 	SDL_Surface* Get_Surface(void){
 		return (SDL_Surface*)(this->_screen);
 	}
+	const Uint8 Get_BitPerPixel_Depth(void) const{
+		const SDL_Surface* _p=this->_screen;
+		return _p->format->BitsPerPixel;
+	}
 
 
 public:		//REFRESH SCHERMO
@@ -103,6 +107,7 @@ public:		//REFRESH SCHERMO
 		}else{
 			_fps_var++;
 		}
+		boxColor(this->_screen,0,0,this->w_screen,this->h_screen,0x000000FF);	//backbuffer
 		return true;
 	}
 	const unsigned int& Get_Current_FPS(void) const{

@@ -22,7 +22,12 @@ const bool HardDisk::LoadFile_fromHardDisk(const std::string& cartella, const st
 			return true;
 		}
 		//--------------------------------------------------------------
-		std::string pathname_complete=cartella+'/'+nomefile;
+		std::string pathname_complete;
+		if(cartella.size()>0){
+			pathname_complete=cartella+'/'+nomefile;
+		}else{
+			pathname_complete=nomefile;
+		}
 		if(HardDisk::File_Exist(pathname_complete)==false){
 			this->last_error="HD: Impossibile trovare la risorsa richiesta!\n"
 				" Risorsa: ["+cartella+"/"+nomefile+"]";

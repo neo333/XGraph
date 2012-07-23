@@ -4,9 +4,8 @@
 
 #include <SDL/SDL.h>
 #include <cmath>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI Point{
+class Point{
 private:		//PRIVATE: DATA
 	Sint16 x;
 	Sint16 y;

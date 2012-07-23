@@ -1,8 +1,6 @@
 #ifndef __PAGE__FS
 #define __PAGE__FS
 
-#include <XGraph/_begin.h>
-
 #ifndef NULL
 #define NULL 0
 #endif
@@ -11,7 +9,7 @@ class HardDisk;
 class De_Encoder;
 class Cache;
 
-class XGRAPH_DLLAPI Page{
+class Page{
 private:
 	friend class HardDisk;
 	friend class De_Encoder;

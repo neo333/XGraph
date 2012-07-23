@@ -3,9 +3,8 @@
 
 #include <XGraph/GuiSystem/Point.h>
 #include <XGraph/GuiSystem/SDL_collide.h>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI Rect{
+class Rect{
 
 public:		//COSTRUTTORI
 	Rect(const Point& start_coord=(0,0), const Sint16& w_param=0, const Sint16& h_param=0):_xy_(start_coord), w(w_param), h(h_param){

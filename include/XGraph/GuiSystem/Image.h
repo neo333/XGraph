@@ -6,9 +6,8 @@
 #include <XGraph/GuiSystem/OutVideo.h>
 #include <XGraph/GuiSystem/Rect.h>
 #include <XGraph/GuiSystem/resize++.h>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI Image{
+class Image{
 
 public:			//COSTRUTTORI
 	Image(const Point& pos_init=(0,0)):pos(pos_init),_alpha(SDL_ALPHA_OPAQUE),area_vis(Rect(Point(0,0),Screen.Get_W_Screen(),Screen.Get_H_Screen())){
@@ -24,6 +23,12 @@ public:			//COSTRUTTORI
 		this->pos=oth.pos;
 		this->_alpha=oth._alpha;
 		this->Set_Alpha(this->_alpha);
+		return *this;
+	}
+	Image& operator=(const Texture& oth){
+		this->_intSurface=oth;
+		this->Set_Alpha(this->_alpha);
+		this->SetCutArea();
 		return *this;
 	}
 	Image(const Texture& _load, const Point& pos_init=(0,0)):_intSurface(_load),pos(pos_init),_alpha(SDL_ALPHA_OPAQUE),area_vis(Rect(Point(0,0),Screen.Get_W_Screen(),Screen.Get_H_Screen())){
@@ -54,7 +59,10 @@ public:		//METODI SET/GET
 			}
 		}
 	}
-	
+	const Rect& GetCutArea(void) const{
+		return this->area_cut;
+	}
+
 	/*Imposta l'area dello schermo in cui avverrà il disegno dell'immagine in questione
 	Le parti di immagine che si troveranno oltre l'area delimitata non verranno disegnate*/
 	void SetDrawnableArea(const Rect& setter){
@@ -252,6 +260,9 @@ public:		//CARICAMENTO
 
 
 
+
+
+
 public:			//FUNZIONI STATICHE AGGIUNTIVE
 
 	/*Ritorna 'true' se il punto del parametro è all'interno dell'area indicata dalla Rect*/
@@ -271,13 +282,43 @@ public:			//FUNZIONI STATICHE AGGIUNTIVE
 		return false;
 	}
 
+	/*Ritorna un pixel che si trova nelle coordinate specificate nei parametri della funzione*/
+	static const bool GetPixel_fromTexture(Texture& tex, const Point& xy, Uint32& pixel_out){
+		if(tex.Is_Load()==false) return false;
+		if(xy.Get_X()>tex.Get_Width() || xy.Get_Y() > tex.Get_Height() || xy.Get_X()<0 || xy.Get_Y()<0) return false;
+		SDL_LockSurface(tex);
+		pixel_out=Image::__getpixel(tex,xy.Get_X(),xy.Get_Y());
+		SDL_UnlockSurface(tex);
+		return true;
+	}
 
-
+	/*Colora un pixel che si trova nelle coordinate specificate nei parametri della funzione
+	secondo il valore esadecimale 0xRRGGBBAA*/
+	static const bool PutPixel_intoTexture(Texture& tex, const Point& xy, const Uint32 pixel_in){
+		if(tex.Is_Load()==false) return false;
+		if(xy.Get_X()>tex.Get_Width() || xy.Get_Y() > tex.Get_Height() || xy.Get_X()<0 || xy.Get_Y()<0) return false;
+		SDL_LockSurface(tex);
+		Image::_putpixel(tex,xy.Get_X(),xy.Get_Y(),pixel_in);
+		SDL_UnlockSurface(tex);
+	}
 
 
 
 
 	
+
+
+
+
+
+public:			//FUNZIONI DI CASTING A BASSO LIVELLO (unsafe!)
+	SDL_Surface* Get_SDLSurface(void){
+		return this->_intSurface;
+	}
+
+
+
+
 
 
 
@@ -291,6 +332,72 @@ private:		//PRIVATE: DATA
 
 	std::string last_error;
 	Uint8 _alpha;
+
+
+
+
+private:		//FUNZIONI STTICHE DI SUPPORTO (PRIVATE)
+	/*getpixel_SDL
+	NOTA: la surface deve essere bloccata prima di chiamare questa funzione!*/
+	static Uint32 __getpixel(SDL_Surface *surface, const int x, const int y){
+		int bpp = surface->format->BytesPerPixel;
+		/* Here p is the address to the pixel we want to retrieve */
+		Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+		switch(bpp) {
+		case 1:
+
+			return *p;
+
+		case 2:
+			return *(Uint16 *)p;
+
+		case 3:
+			if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+				return p[0] << 16 | p[1] << 8 | p[2];
+			else
+				return p[0] | p[1] << 8 | p[2] << 16;
+
+		case 4:
+			return *(Uint32 *)p;
+
+		default:
+			return 0;       /* shouldn't happen, but avoids warnings */
+		}
+	}
+
+	/*putpixel_SDL
+	NOTA: la surface deve essere bloccata prima di chiamare questa funzione!*/
+	static void _putpixel(SDL_Surface *surface, const int x, const int y, const Uint32 pixel){
+		int bpp = surface->format->BytesPerPixel;
+		/* Here p is the address to the pixel we want to set */
+		Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
+
+		switch(bpp) {
+		case 1:
+			*p = pixel;
+			break;
+
+		case 2:
+			*(Uint16 *)p = pixel;
+			break;
+
+		case 3:
+			if(SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+				p[0] = (pixel >> 16) & 0xff;
+				p[1] = (pixel >> 8) & 0xff;
+				p[2] = pixel & 0xff;
+			} else {
+				p[0] = pixel & 0xff;
+				p[1] = (pixel >> 8) & 0xff;
+				p[2] = (pixel >> 16) & 0xff;
+			}
+			break;
+
+		case 4:
+			*(Uint32 *)p = pixel;
+			break;
+		}
+	}
 };
 
 #endif

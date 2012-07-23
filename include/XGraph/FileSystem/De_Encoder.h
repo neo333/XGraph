@@ -3,9 +3,8 @@
 
 #include <cassert>
 #include <XGraph/FileSystem/Page.h>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI De_Encoder{
+class De_Encoder{
 private:
 	De_Encoder(void);
 	De_Encoder(const De_Encoder&);

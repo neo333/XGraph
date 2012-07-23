@@ -2,9 +2,8 @@
 #define __COLOR__GUI
 
 #include <SDL/SDL.h>
-#include <XGraph/_begin.h>
 
-class XGRAPH_DLLAPI Color{
+class Color{
 private:
 	Uint8 r;
 	Uint8 g;
