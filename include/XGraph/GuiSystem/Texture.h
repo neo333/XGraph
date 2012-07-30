@@ -5,6 +5,7 @@
 #include <string>
 #include <XGraph/FileSystem/HardDisk.h>
 #include <XGraph/GuiSystem/Color.h>
+#include <XGraph/GuiSystem/Rect.h>
 
 class Texture{
 public:		//COSTRUTTORI E CARICAMENTO
@@ -14,6 +15,17 @@ public:		//COSTRUTTORI E CARICAMENTO
 	Texture(const Texture& oth):mp_surface(internal_Copy_SDLSurface(oth.mp_surface)){
 		
 	}
+	
+	
+	
+	/*Crea una Texture vuota (che è, però, caricata!) Questo metodo di costruzione può risultare utile quando si deve
+	creare una texture componendola di varie parti di altre textures.
+	Una volta creata la texture delle dimensioni richieste è possibile "sovrapporre" pezzi di texture precedentemente caricate
+	attraverso la funzione membro di questa classe apposita!*/
+	Texture(const int n_width, const int n_height);
+	
+	
+	
 	Texture& operator=(const Texture& oth){
 		this->Delete();
 		this->mp_surface=this->internal_Copy_SDLSurface(oth.mp_surface);
@@ -128,6 +140,35 @@ public:		//METODI DI GET&SET
 
 
 
+
+
+public:		//FUNZIONI AGGIUNTIVE
+	/*Esegue un blit (copia una texture su di un'altra) di una texture su 'questa'
+	Indicare la posizione di questa texture sul quale eseguire la copia della texture sorgente*/
+	const bool Paste_Texture(const Texture& source, const Point& xy, const Rect& cut =Rect(Point(0,0),0,0)){
+		if(this->Is_Load() && source.Is_Load()){
+			SDL_Rect _xy;
+			_xy.x=xy.Get_X();
+			_xy.y=xy.Get_Y();
+			SDL_Rect _cut=cut;
+			if(_cut.w==0){
+				_cut.w=source.Get_Width();
+			}
+			if(_cut.h==0){
+				_cut.h=source.Get_Height();
+			}
+
+			if(SDL_BlitSurface(source.mp_surface, &_cut, this->mp_surface, &_xy)==0){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
+
 public:		//OPERATORI
 	operator SDL_Surface*(void){
 		return this->mp_surface;
@@ -140,6 +181,20 @@ public:		//OPERATORI
 	
 
 	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

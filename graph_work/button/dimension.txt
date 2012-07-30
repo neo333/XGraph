@@ -1,0 +1,27 @@
+-----one fase----
+SS	0x0	6x6
+SC	6x0	1X6
+SD	7x0	6x6
+
+CS	0x6  	6x1
+CC	6x6 	1x1
+CD	7x6 	6x1
+
+GS	0x7   	6x6
+GC	6x7  	1x6
+GD	7x7  	6x6
+
+
+---two fase-----
+SS	0x13	6x6
+SC	6x13	1X6
+SD	7x13	6x6
+
+CS	0x19  	6x1
+CC	6x19 	1x1
+CD	7x19 	6x1
+
+GS	0x20   	6x6
+GC	6x20  	1x6
+GD	7x20  	6x6
+

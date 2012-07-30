@@ -3,7 +3,6 @@
 
 #include <XGraph/GuiSystem/Texture.h>
 #include <cassert>
-#include <SDL/SDL_gfxPrimitives.h>
 
 struct Setting_Window{
 	int width;
@@ -107,7 +106,6 @@ public:		//REFRESH SCHERMO
 		}else{
 			_fps_var++;
 		}
-		boxColor(this->_screen,0,0,this->w_screen,this->h_screen,0x000000FF);	//backbuffer
 		return true;
 	}
 	const unsigned int& Get_Current_FPS(void) const{

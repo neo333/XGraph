@@ -59,9 +59,6 @@ public:		//METODI SET/GET
 			}
 		}
 	}
-	const Rect& GetCutArea(void) const{
-		return this->area_cut;
-	}
 
 	/*Imposta l'area dello schermo in cui avverrà il disegno dell'immagine in questione
 	Le parti di immagine che si troveranno oltre l'area delimitata non verranno disegnate*/
@@ -308,13 +305,6 @@ public:			//FUNZIONI STATICHE AGGIUNTIVE
 	
 
 
-
-
-
-public:			//FUNZIONI DI CASTING A BASSO LIVELLO (unsafe!)
-	SDL_Surface* Get_SDLSurface(void){
-		return this->_intSurface;
-	}
 
 
 

@@ -2,7 +2,7 @@
 #define __XGRAPH__LIBRARY
 
 #include <XGraph/GuiSystem/OutVideo.h>
-#include <XGraph/GuiSystem/XG_Window.h>
-#include <XGraph/GuiSystem/XG_ManagerGUI.h>
+
+#include <XGraph/InputSystem/Gestore_Input.h>
 
 #endif

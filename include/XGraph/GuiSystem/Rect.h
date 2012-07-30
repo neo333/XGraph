@@ -10,7 +10,9 @@ public:		//COSTRUTTORI
 	Rect(const Point& start_coord=(0,0), const Sint16& w_param=0, const Sint16& h_param=0):_xy_(start_coord), w(w_param), h(h_param){
 
 	}
+	Rect(const SDL_Rect& init):_xy_(init.x,init.y),w(init.w),h(init.h){
 
+	}
 
 
 public:		//METODI SET&GET
@@ -26,10 +28,10 @@ public:		//METODI SET&GET
 	const Point& Get_Position(void) const{
 		return this->_xy_;
 	}
-	const Sint16& Get_W(void) const{
+	const Sint16 Get_W(void) const{
 		return this->w;
 	}
-	const Sint16& Get_H(void) const{
+	const Sint16 Get_H(void) const{
 		return this->h;
 	}
 
@@ -67,6 +69,9 @@ public:			//OPERATORI
 		return false;
 	}
 
+	Rect operator+(const Rect& oth) const{
+		return Rect(this->_xy_ + oth._xy_, this->w + oth.w, this->h + oth.h);
+	}
 
 
 

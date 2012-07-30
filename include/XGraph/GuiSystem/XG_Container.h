@@ -5,45 +5,48 @@
 #include <vector>
 
 class XG_Container: public XG_Component{
-public:		//COSTRUTTORE PADRE
-	XG_Container(void);
-	virtual ~XG_Container(void);
-
-public:		//FUNZIONI GESTIONE WIDGETS
-	virtual const bool AggiungiComponente(XG_Component* _adder){
-		if(_adder!=NULL){
-			this->componenti_aggregati.push_back(_adder);
-			return true;
-		}
-		return false;
+public:		//INTERFACCIA COMPONENTE GRAFICO
+	virtual const bool Load(void) =0;
+	virtual void UnLoad(void) =0;
+	virtual void SetDrawnableArea(const Rect&) =0;
+	virtual const bool Is_Load(void) const=0;
+	virtual const std::string& Get_LastError(void) const{
+		return this->_error;
 	}
+	virtual void Set_Position(const Point&) =0;
+	virtual const Point& Get_Position(void) const =0;
+	virtual const Sint16 Get_W(void) const =0;
+	virtual const Sint16 Get_H(void) const =0;
+	virtual void Set_Visible(const bool) =0;
 
 
+protected:	//GESTIONE COMPONENTI AGGANCIATI
+	Rect area_form_drawnable;
+	std::string _error;
 
-
-
-
-
-
-private:	//DATA
-	friend class XG_ManagerGUI;
-	std::vector<XG_Component*> componenti_aggregati;
-
-private:	//FUNZIONI PRIVATE
-	const bool DrawAll(void){
-		if(this->DrawThisComponent()==false) return false;
-		bool result=true;
-		std::vector<XG_Component*>::iterator elem;
-		for(elem=this->componenti_aggregati.begin(); elem!=this->componenti_aggregati.end(); elem++){
-			if((*elem)->DrawThisComponent()==false){
-				result=false;
+	void AddControll(XG_Component* adder){
+		if(adder){
+			this->_controlls.push_back(adder);
+		}
+	}
+	virtual const bool DrawAndUpdate_AllControlls(void){
+		std::vector<XG_Component*>::iterator it;
+		for(it=this->_controlls.begin(); it!=this->_controlls.end(); it++){
+			(*it)->UpDateControll();
+			(*it)->SetDrawnableArea(this->area_form_drawnable);
+			if((*it)->Drawn()==false){
+				this->_error=(*it)->Get_LastError();
 			}
 		}
-		return result;
 	}
 
-protected:	//IMPLEMENTAZIONE XG_COMPONENT
-	virtual const bool DrawThisComponent(void)=0;
+
+
+
+
+
+private:	//PRIVATE DATA
+	std::vector<XG_Component*> _controlls;
 };
 
 #endif
