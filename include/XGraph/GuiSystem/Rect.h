@@ -48,6 +48,23 @@ public:		//FUNZIONI AGGIUNTIVE STATICHE
 		return false;
 	}
 
+	/*TODO: verificare! (da fare test!)
+	Ritorna l'intersezione tra due rettangoli*/
+	static const bool Rects_Intersect(const Rect& op1, const Rect& op2, Rect& _out_result){
+		if(Rect::Rect_Collide(op1,op2)==true) {  
+			_out_result._xy_.Set_X(Point::Rts_Max(op1._xy_.Get_X(), op2._xy_.Get_X()));
+			_out_result._xy_.Set_Y(Point::Rts_Max(op1._xy_.Get_Y(), op2._xy_.Get_Y()));
+			_out_result.w = Point::Rts_Min( op1._xy_.Get_X() + op1.w, op2._xy_.Get_X() + op2.w) - _out_result._xy_.Get_X();
+			_out_result.h = Point::Rts_Min( op1._xy_.Get_Y() + op1.h, op2._xy_.Get_Y() + op2.h) - _out_result._xy_.Get_Y();
+			return true;
+		} 
+		_out_result._xy_.Set_X(0);
+		_out_result._xy_.Set_Y(0);
+		_out_result.w=0;
+		_out_result.h=0;
+		return false;
+	}
+
 
 public:		//CASTING
 	operator SDL_Rect(void) const{

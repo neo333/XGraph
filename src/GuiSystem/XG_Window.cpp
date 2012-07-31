@@ -23,6 +23,7 @@ const bool XG_Window::Load(void){
 			this->_error="Impossibile eseguire l'algoritmo di composizione componente grafico!";
 			return false;
 		}
+		XG_Container::Load();
 	}
 	return true;
 }

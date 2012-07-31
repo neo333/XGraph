@@ -60,13 +60,13 @@ public:		//OPERATORI
 
 public:		//FUNZIONI STATICHE aggiuntive
 	/*Ritorna il massimo tra i due elementi espressi nel parametro*/
-	template<class T> static T& Rts_Max(T& elem1, T& elem2){
+	template<class T> static const T Rts_Max(const T elem1, const T elem2){
 		if(elem1>elem2) return elem1;
 		return elem2;
 	}
 
 	/*Ritorna il minimo tra i due elementi espressi nel parametro*/
-	template<class T> static T& Rts_Min(T& elem1, T& elem2){
+	template<class T> static const T Rts_Min(const T elem1, const T elem2){
 		if(elem1<elem2) return elem1;
 		return elem2;
 	}

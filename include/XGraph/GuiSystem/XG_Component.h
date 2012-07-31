@@ -9,36 +9,48 @@ class XG_Container;
 
 class XG_Component{
 public:		//COSTRUTTORE
-	XG_Component(void):moveable(false),agganciato(false){
-
+	XG_Component(void):moveable(false),agganciato(false),visible(true),active_controll(true){
 	}
 
 public:		//INTERFACCIA COMPONENTE GRAFICO
 	virtual const bool Load(void) =0;
 	virtual void UnLoad(void) =0;
 	virtual void SetDrawnableArea(const Rect&) =0;
+	virtual const Rect& GetDrawnableArea(void) const=0;
 	virtual const bool Is_Load(void) const=0;
 	virtual const std::string& Get_LastError(void) const=0;
 	virtual void Set_Position(const Point&) =0;
 	virtual const Point& Get_Position(void) const =0;
 	virtual const Sint16 Get_W(void) const =0;
 	virtual const Sint16 Get_H(void) const =0;
-	virtual void Set_Visible(const bool) =0;
+	virtual void Set_Alpha(const Uint8) =0;
 	virtual void Set_Moveable(const bool setter){
 		this->moveable=setter;
+	}
+	virtual void Set_Visible(const bool setter){
+		this->visible=setter;
 	}
 	virtual const bool Get_Moveable(void){
 		return this->moveable;
 	}
-	virtual const bool Drawn_and_UpDate_All(void){
-		this->UpDateControll();
-		return this->Drawn();
+	virtual const bool Run(void){
+		if(this->visible==true && this->Is_Load()){
+			if(this->active_controll==true){
+				this->UpDateControll();
+			}
+			return this->Drawn();
+		}
+		return true;
 	}
 protected:
+	bool visible;
 	virtual void UpDateControll(void) =0;
 	virtual const bool Drawn(void) =0;
+
+	/*Chiamare questa funzione a 'RUN-LOOP' nella specifica funzione di UpDate-Controll per 
+	permettere al componente grafico di poter essere trascinato*/
 	inline void UpdateTrascinaObj(const Rect& area_grap){
-		if(this->moveable){
+		if(this->moveable && XG_Component::Point_inArea(Point(ctrlMouse.Get_X(),ctrlMouse.Get_Y()),this->GetDrawnableArea())==true){
 			Clic_inPoint _clic=ctrlMouse.Get_LastClic();
 		
 			if(this->agganciato){
@@ -50,12 +62,14 @@ protected:
 					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
 				}
 			}else{
-				if(_clic.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_clic.x_clic,_clic.y_clic),area_grap)==true){
+				if(_clic.button_type_clic==TMB_LEFT && XG_Component::Mouse_inArea(area_grap)==true && XG_Component::Point_inArea(Point(_clic.x_clic,_clic.y_clic),area_grap)==true){
 					this->agganciato=true;
 					this->clic_agganciato.Set_X(ctrlMouse.Get_X());
 					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
 				}
 			}
+		}else{
+			this->agganciato=false;
 		}
 	}
 
@@ -93,10 +107,11 @@ protected:	//FUNZIONI DI SUPPORTO
 	}
 
 private:	//PRIVATE DATA
-	friend class XG_Container;
+	friend class XG_Container;		//TODO: possibilmente limita alla funzione membro del contenitore
 	bool moveable;
 	bool agganciato;
 	Point clic_agganciato;
+	bool active_controll;	//blocca i controlli sul componente(viene utilizzato dai container per gestire le priorità di input)
 };
 
 #endif

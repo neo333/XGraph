@@ -16,7 +16,6 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	virtual const Point& Get_Position(void) const =0;
 	virtual const Sint16 Get_W(void) const =0;
 	virtual const Sint16 Get_H(void) const =0;
-	virtual void Set_Visible(const bool) =0;
 protected:
 	virtual void UpDateControll(void) =0;
 	virtual const bool Drawn(void) =0;

@@ -65,6 +65,10 @@ public:		//METODI SET/GET
 	void SetDrawnableArea(const Rect& setter){
 		this->area_vis=setter;
 	}	
+	const Rect& GetDrawnableArea(void) const{
+		return this->area_vis;
+	}
+	
 	void Set_Position(const Point& pp_point){
 		this->pos=pp_point;
 	}
@@ -109,7 +113,10 @@ public:		//METODI SET/GET
 		return true;
 	}
 
-
+	/*Setta il colore trasparente*/
+	const bool Set_ColorKey(const Color& setter){
+		return this->_intSurface.Set_ColorKey(setter);
+	}
 
 
 

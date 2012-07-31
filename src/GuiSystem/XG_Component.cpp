@@ -33,7 +33,7 @@ const bool XG_Component::CompositeObjectGraphic(const Texture& source, const Sin
 					cut_paste.Set_W(w_corner);
 					cut_paste.Set_H(h_corner);
 				}else{
-					if(i==w_middle-1){
+					if(i==w_middle+1){
 						//SD
 						xy_paste.Set_X(w_corner + (i-1));
 						xy_paste.Set_Y(0);
@@ -50,7 +50,7 @@ const bool XG_Component::CompositeObjectGraphic(const Texture& source, const Sin
 					}
 				}
 			}else{
-				if(k==h_middle-1){
+				if(k==h_middle+1){
 					if(i==0){
 						//GS
 						xy_paste.Set_X(0);
@@ -59,7 +59,7 @@ const bool XG_Component::CompositeObjectGraphic(const Texture& source, const Sin
 						cut_paste.Set_W(w_corner);
 						cut_paste.Set_H(h_corner);
 					}else{
-						if(i==w_middle-1){
+						if(i==w_middle+1){
 							//GD
 							xy_paste.Set_X(w_corner + (i-1));
 							xy_paste.Set_Y(h_corner + (k-1));
@@ -84,7 +84,7 @@ const bool XG_Component::CompositeObjectGraphic(const Texture& source, const Sin
 						cut_paste.Set_W(w_corner);
 						cut_paste.Set_H(1);
 					}else{
-						if(i==w_middle-1){
+						if(i==w_middle+1){
 							//CD
 							xy_paste.Set_X(w_corner + (i-1));
 							xy_paste.Set_Y(h_corner + (k-1));
@@ -106,5 +106,6 @@ const bool XG_Component::CompositeObjectGraphic(const Texture& source, const Sin
 		}
 	}
 	_out = Image(render);
+	_out.Set_ColorKey(Color(0,0,0));
 	return true;
 }

@@ -5,16 +5,23 @@
 
 class XG_Window: public XG_Container{
 public:		//COSTRUTTORI
-	XG_Window(const Sint16 SizeW, const Sint16 SizeH):XG_Container(){
+	XG_Window(const Sint16 SizeW, const Sint16 SizeH){
 		this->SetSize(SizeW,SizeH);
+		this->Set_Visible(true);
+		this->Set_Moveable(true);
 	}
 public:		//INTERFACCIA COMPONENTE GRAFICO
 	virtual const bool Load(void);
 	virtual void UnLoad(void){
+		XG_Container::UnLoad();
 		this->render_win.UnLoad();
 	}
 	virtual void SetDrawnableArea(const Rect& setter){
+		XG_Container::SetDrawnableArea(setter);
 		this->render_win.SetDrawnableArea(setter);
+	}
+	virtual const Rect& GetDrawnableArea(void) const{
+		return this->render_win.GetDrawnableArea();
 	}
 	virtual const bool Is_Load(void) const{
 		return this->render_win.Is_Load();
@@ -22,9 +29,14 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	virtual void Set_Position(const Point& setter){
 		this->form_win.Set_Position(setter);
 		this->render_win.Set_Position(setter);
+
+		this->UpDateAreaActive(Rect(this->Get_Position() + Point(3,XG_Window::h_corner),this->Get_W()-6,this->Get_H()-XG_Window::h_corner-3));
+	}
+	virtual void Set_Alpha(const Uint8 setter){
+		this->render_win.Set_Alpha(setter);
 	}
 	virtual const Point& Get_Position(void) const{
-		this->form_win.Get_Position();
+		return this->form_win.Get_Position();
 	}
 	virtual const Sint16 Get_W(void) const{
 		return this->form_win.Get_W();
@@ -32,13 +44,17 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	virtual const Sint16 Get_H(void) const{
 		return this->form_win.Get_H();
 	}
-	virtual void Set_Visible(const bool) =0;
 	protected:
 	virtual void UpDateControll(void){
-		XG_Component::UpdateTrascinaObj(this->area_form);
+		if(this->visible){
+			XG_Component::UpdateTrascinaObj(Rect(form_win.Get_Position(),this->Get_W(),XG_Window::h_corner));
+		}
 	}
 	virtual const bool Drawn(void){
-		return this->render_win.Drawn();
+		if(this->visible){
+			return this->render_win.Drawn();
+		}
+		return true;
 	}
 
 public:		//METODI SET&GET
@@ -58,6 +74,8 @@ public:		//METODI SET&GET
 			this->UnLoad();
 			this->Load();
 		}
+
+		this->UpDateAreaActive(Rect(this->Get_Position() + Point(3,XG_Window::h_corner),this->Get_W()-6,this->Get_H()-XG_Window::h_corner-3));
 	}
 
 
@@ -66,11 +84,14 @@ private:	//PRIVATE DATA
 	Image render_win;
 	Rect form_win;
 
+private:	//FUNZIONI PRIVATE
+	inline void UpDateAreaActive(const Rect& setter){
+		this->area_form_drawnable=setter;
+	}
 
 private:	//COSTANTI DI CLASSE
 	static const Sint16 w_corner;
 	static const Sint16 h_corner;
-
 };
 
 #endif

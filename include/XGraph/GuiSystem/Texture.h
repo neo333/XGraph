@@ -18,7 +18,8 @@ public:		//COSTRUTTORI E CARICAMENTO
 	
 	
 	
-	/*Crea una Texture vuota (che è, però, caricata!) Questo metodo di costruzione può risultare utile quando si deve
+	/*Crea una Texture vuota (che è, però, caricata!) (un rettangolo nero per intenderci)
+	Questo metodo di costruzione può risultare utile quando si deve
 	creare una texture componendola di varie parti di altre textures.
 	Una volta creata la texture delle dimensioni richieste è possibile "sovrapporre" pezzi di texture precedentemente caricate
 	attraverso la funzione membro di questa classe apposita!*/
@@ -129,13 +130,27 @@ public:		//METODI DI GET&SET
 	}
 	
 	const bool Set_ColorKey(const Color& setter){
-		if(SDL_SetColorKey(this->mp_surface, SDL_RLEACCEL, SDL_MapRGB(this->mp_surface->format,setter.Get_Red(),setter.Get_Green(),setter.Get_Blue())!=0)){
-			this->last_error=SDL_GetError();
-			return false;
+		if(this->mp_surface){
+			Uint32 _mod=SDL_MapRGB(this->mp_surface->format,setter.Get_Red(),setter.Get_Green(),setter.Get_Blue());
+			if(SDL_SetColorKey(this->mp_surface,SDL_SRCCOLORKEY | SDL_RLEACCEL, _mod)!=0){
+				this->last_error=SDL_GetError();
+				return false;
+			}
 		}
 		return true;
 	}
+	const Color Get_ColorKey(void) const{
+		if(this->mp_surface){
+			Uint32 colorKey=this->mp_surface->format->colorkey;
 
+			Uint8 red = (Uint8)(colorKey >> 16);
+			Uint8 green = (Uint8)(colorKey >> 8);
+			Uint8 blue = (Uint8)(colorKey);
+
+			return Color(red,green,blue);
+		}
+		return Color();
+	}
 
 
 

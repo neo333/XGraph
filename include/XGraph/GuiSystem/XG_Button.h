@@ -6,7 +6,7 @@
 
 class XG_Button: public XG_Widget{
 public:		//COSTRUTTORI
-	XG_Button(const Sint16 w_size =0, const Sint16 h_size =0):XG_Widget(),select(false),visible(true){
+	XG_Button(const Sint16 w_size =0, const Sint16 h_size =0):XG_Widget(),select(false){
 		this->SetSize(w_size,h_size);
 	}
 
@@ -23,6 +23,9 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 		this->render_button_off.SetDrawnableArea(setter);
 		this->render_button_on.SetDrawnableArea(setter);
 	}
+	virtual const Rect& GetDrawnableArea(void) const{
+		return this->render_button_off.GetDrawnableArea();
+	}
 	virtual const bool Is_Load(void) const{
 		if(this->render_button_off.Is_Load()==true && this->render_button_on.Is_Load()==true){
 			return true;
@@ -31,6 +34,10 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	}
 	virtual const std::string& Get_LastError(void) const{
 		return this->_error;
+	}
+	virtual void Set_Alpha(const Uint8 setter){
+		this->render_button_off.Set_Alpha(setter);
+		this->render_button_on.Set_Alpha(setter);
 	}
 	virtual void Set_Position(const Point& setter){
 		this->area_button.Set_Position(setter);
@@ -45,9 +52,6 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	}
 	virtual const Sint16 Get_H(void) const{
 		return this->area_button.Get_H();
-	}
-	virtual void Set_Visible(const bool setter){
-		this->visible=setter;
 	}
 protected:
 	virtual const bool Drawn(void){
@@ -82,7 +86,7 @@ protected:
 			}
 
 			if(ctrlMouse.GetState_LeftButton()==false){
-				if(_rel.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_rel.x_clic,_rel.y_clic),this->area_button)==true){
+				if(_rel.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_rel.x_clic,_rel.y_clic),this->area_button)==true && XG_Component::Mouse_inArea(this->area_button)==true){
 					if(_clic.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_clic.x_clic,_clic.y_clic),this->area_button)==true){
 						std::vector<XG_Evento<>>::iterator it;
 						for(it=this->eventi_on_clic.begin(); it!=this->eventi_on_clic.end(); it++){
@@ -146,7 +150,6 @@ private:	//INTERNAL DATA
 	Rect area_button;
 	std::string _error;
 	bool select;
-	bool visible;
 
 	std::vector<XG_Evento<>> eventi_on_clic;
 
