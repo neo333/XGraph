@@ -30,6 +30,9 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	virtual void Set_Visible(const bool setter){
 		this->visible=setter;
 	}
+	virtual inline const bool Get_Visible(void) const{
+		return this->visible;
+	}
 	virtual const bool Get_Moveable(void){
 		return this->moveable;
 	}
@@ -43,8 +46,13 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 		return true;
 	}
 protected:
-	bool visible;
+	//virtual const bool Want_RequestFocus(void) =0;
+
+	/*TODO: in attesa di cambio*/
 	virtual void UpDateControll(void) =0;
+
+	/*Funzione di disegno pura. Viene chiamata a 'RUN-LOOP' se e solo se il componente è settato come 'VISIBILE'.
+	Disegna il componente*/
 	virtual const bool Drawn(void) =0;
 
 	/*Chiamare questa funzione a 'RUN-LOOP' nella specifica funzione di UpDate-Controll per 
@@ -109,6 +117,7 @@ protected:	//FUNZIONI DI SUPPORTO
 private:	//PRIVATE DATA
 	friend class XG_Container;		//TODO: possibilmente limita alla funzione membro del contenitore
 	bool moveable;
+	bool visible;
 	bool agganciato;
 	Point clic_agganciato;
 	bool active_controll;	//blocca i controlli sul componente(viene utilizzato dai container per gestire le priorità di input)

@@ -55,49 +55,44 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	}
 protected:
 	virtual const bool Drawn(void){
-		if(this->visible){
-			if(this->select==true){
-				if(this->render_button_on.Drawn()==false){
-					this->_error=this->render_button_on.Get_LastError();
-					return false;
-				}
-			}else{
-				if(this->render_button_off.Drawn()==false){
-					this->_error=this->render_button_off.Get_LastError();
-					return false;
-				}
+		if(this->select==true){
+			if(this->render_button_on.Drawn()==false){
+				this->_error=this->render_button_on.Get_LastError();
+				return false;
+			}
+		}else{
+			if(this->render_button_off.Drawn()==false){
+				this->_error=this->render_button_off.Get_LastError();
+				return false;
 			}
 		}
 		return true;
 	}
 	virtual void UpDateControll(void){
-		if(this->visible){
-			Clic_inPoint _clic=ctrlMouse.Get_LastClic();
-			Clic_inPoint _rel=ctrlMouse.Get_LastClicRelease();
+		Clic_inPoint _clic=ctrlMouse.Get_LastClic();
+		Clic_inPoint _rel=ctrlMouse.Get_LastClicRelease();
 
-			if(XG_Component::Mouse_inArea(this->area_button)){
-				if(ctrlMouse.GetState_LeftButton()==true && XG_Component::Point_inArea(Point(ctrlMouse.Get_X(),ctrlMouse.Get_Y()),this->area_button)==true){
-					this->select=false;
-				}else{
-					this->select=true;
-				}
-			}else{
+		if(XG_Component::Mouse_inArea(this->area_button)){
+			if(ctrlMouse.GetState_LeftButton()==true && XG_Component::Point_inArea(Point(ctrlMouse.Get_X(),ctrlMouse.Get_Y()),this->area_button)==true){
 				this->select=false;
+			}else{
+				this->select=true;
 			}
+		}else{
+			this->select=false;
+		}
 
-			if(ctrlMouse.GetState_LeftButton()==false){
-				if(_rel.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_rel.x_clic,_rel.y_clic),this->area_button)==true && XG_Component::Mouse_inArea(this->area_button)==true){
-					if(_clic.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_clic.x_clic,_clic.y_clic),this->area_button)==true){
-						std::vector<XG_Evento<>>::iterator it;
-						for(it=this->eventi_on_clic.begin(); it!=this->eventi_on_clic.end(); it++){
-							(*it).ExequeEvent();
-						}
+		if(ctrlMouse.GetState_LeftButton()==false){
+			if(_rel.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_rel.x_clic,_rel.y_clic),this->area_button)==true && XG_Component::Mouse_inArea(this->area_button)==true){
+				if(_clic.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_clic.x_clic,_clic.y_clic),this->area_button)==true){
+					std::vector<XG_Evento<>>::iterator it;
+					for(it=this->eventi_on_clic.begin(); it!=this->eventi_on_clic.end(); it++){
+						(*it).ExequeEvent();
 					}
 				}
 			}
-
-			XG_Component::UpdateTrascinaObj(this->area_button);
 		}
+		XG_Component::UpdateTrascinaObj(this->area_button);
 	}
 
 
