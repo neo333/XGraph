@@ -19,6 +19,7 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	virtual void SetDrawnableArea(const Rect& setter){
 		XG_Container::SetDrawnableArea(setter);
 		this->render_win.SetDrawnableArea(setter);
+		this->Set_GrappableArea(Rect(Point(0,0),this->Get_W(),XG_Window::h_corner));
 	}
 	virtual const Rect& GetDrawnableArea(void) const{
 		return this->render_win.GetDrawnableArea();
@@ -31,6 +32,7 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 		this->render_win.Set_Position(setter);
 
 		this->UpDateAreaActive(Rect(this->Get_Position() + Point(3,XG_Window::h_corner),this->Get_W()-6,this->Get_H()-XG_Window::h_corner-3));
+		this->Set_GrappableArea(Rect(Point(0,0),0,XG_Window::h_corner));
 	}
 	virtual void Set_Alpha(const Uint8 setter){
 		this->render_win.Set_Alpha(setter);
@@ -46,12 +48,10 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 	}
 	protected:
 	virtual void UpDateControll(void){
-		if(this->visible){
-			XG_Component::UpdateTrascinaObj(Rect(form_win.Get_Position(),this->Get_W(),XG_Window::h_corner));
-		}
+
 	}
 	virtual const bool Drawn(void){
-		if(this->visible){
+		if(this->visible && this->Is_Load()==true){
 			return this->render_win.Drawn();
 		}
 		return true;
@@ -76,6 +76,7 @@ public:		//METODI SET&GET
 		}
 
 		this->UpDateAreaActive(Rect(this->Get_Position() + Point(3,XG_Window::h_corner),this->Get_W()-6,this->Get_H()-XG_Window::h_corner-3));
+		this->Set_GrappableArea(Rect(Point(0,0),this->Get_W(),XG_Window::h_corner));
 	}
 
 

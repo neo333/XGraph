@@ -40,46 +40,20 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 		if(this->visible==true && this->Is_Load()){
 			if(this->active_controll==true){
 				this->UpDateControll();
+				this->UpdateTrascinaObj();
 			}
 			return this->Drawn();
 		}
 		return true;
 	}
 protected:
-	//virtual const bool Want_RequestFocus(void) =0;
 
-	/*TODO: in attesa di cambio*/
+	/*Chiama alla funzione di controllo dell'oggetto RUN-LOOP se il componente ha focus*/
 	virtual void UpDateControll(void) =0;
 
 	/*Funzione di disegno pura. Viene chiamata a 'RUN-LOOP' se e solo se il componente è settato come 'VISIBILE'.
 	Disegna il componente*/
 	virtual const bool Drawn(void) =0;
-
-	/*Chiamare questa funzione a 'RUN-LOOP' nella specifica funzione di UpDate-Controll per 
-	permettere al componente grafico di poter essere trascinato*/
-	inline void UpdateTrascinaObj(const Rect& area_grap){
-		if(this->moveable && XG_Component::Point_inArea(Point(ctrlMouse.Get_X(),ctrlMouse.Get_Y()),this->GetDrawnableArea())==true){
-			Clic_inPoint _clic=ctrlMouse.Get_LastClic();
-		
-			if(this->agganciato){
-				if(ctrlMouse.GetState_LeftButton()==false){
-					this->agganciato=false;
-				}else{
-					this->Set_Position(this->Get_Position() + Point(ctrlMouse.Get_X() - this->clic_agganciato.Get_X(), ctrlMouse.Get_Y() - this->clic_agganciato.Get_Y()));
-					this->clic_agganciato.Set_X(ctrlMouse.Get_X());
-					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
-				}
-			}else{
-				if(_clic.button_type_clic==TMB_LEFT && XG_Component::Mouse_inArea(area_grap)==true && XG_Component::Point_inArea(Point(_clic.x_clic,_clic.y_clic),area_grap)==true){
-					this->agganciato=true;
-					this->clic_agganciato.Set_X(ctrlMouse.Get_X());
-					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
-				}
-			}
-		}else{
-			this->agganciato=false;
-		}
-	}
 
 
 protected:	//FUNZIONI DI SUPPORTO
@@ -114,13 +88,41 @@ protected:	//FUNZIONI DI SUPPORTO
 		return false;
 	}
 
+	inline void Set_GrappableArea(const Rect& setter){
+		this->area_grappable=setter;
+	}
+
 private:	//PRIVATE DATA
-	friend class XG_Container;		//TODO: possibilmente limita alla funzione membro del contenitore
+	friend class XG_Container;
 	bool moveable;
 	bool visible;
 	bool agganciato;
 	Point clic_agganciato;
 	bool active_controll;	//blocca i controlli sul componente(viene utilizzato dai container per gestire le priorità di input)
+	Rect area_grappable;
+
+private:	//FUNZIONI DI SUPPORTO COMPONENTI
+	inline void UpdateTrascinaObj(void){
+		if(this->moveable && XG_Component::Mouse_inArea(this->GetDrawnableArea())==true){
+			if(this->agganciato){
+				if(ctrlMouse.GetState_LeftButton()==false){
+					this->agganciato=false;
+				}else{
+					this->Set_Position(this->Get_Position() + Point(ctrlMouse.Get_X() - this->clic_agganciato.Get_X(), ctrlMouse.Get_Y() - this->clic_agganciato.Get_Y()));
+					this->clic_agganciato.Set_X(ctrlMouse.Get_X());
+					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
+				}
+			}else{
+				if(ctrlMouse.Get_Instance().GetState_LeftButton()==true && XG_Component::Mouse_inArea(this->area_grappable + this->Get_Position())==true){
+					this->agganciato=true;
+					this->clic_agganciato.Set_X(ctrlMouse.Get_X());
+					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
+				}
+			}
+		}else{
+			this->agganciato=false;
+		}
+	}
 };
 
 #endif

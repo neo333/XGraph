@@ -18,16 +18,16 @@ public:		//COSTRUTTORE
 
 
 public:		//METODI SET&GET
-	void Set_X(const Sint16 x_param){
+	inline void Set_X(const Sint16 x_param){
 		this->x=x_param;
 	}
-	void Set_Y(const Sint16 y_param){
+	inline void Set_Y(const Sint16 y_param){
 		this->y=y_param;
 	}
-	const Sint16 Get_X(void) const{
+	inline const Sint16 Get_X(void) const{
 		return this->x;
 	}
-	const Sint16 Get_Y(void) const{
+	inline const Sint16 Get_Y(void) const{
 		return this->y;
 	}
 

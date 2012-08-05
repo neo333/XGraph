@@ -6,7 +6,7 @@
 
 class XG_Button: public XG_Widget{
 public:		//COSTRUTTORI
-	XG_Button(const Sint16 w_size =0, const Sint16 h_size =0):XG_Widget(),select(false){
+	XG_Button(const Sint16 w_size =100, const Sint16 h_size =25):XG_Widget(),select(false){
 		this->SetSize(w_size,h_size);
 	}
 
@@ -43,6 +43,7 @@ public:		//INTERFACCIA COMPONENTE GRAFICO
 		this->area_button.Set_Position(setter);
 		this->render_button_on.Set_Position(setter);
 		this->render_button_off.Set_Position(setter);
+		this->Set_GrappableArea(Rect(Point(0,0),this->Get_W(),this->Get_H()));
 	}
 	virtual const Point& Get_Position(void) const{
 		return this->area_button.Get_Position();
@@ -69,30 +70,11 @@ protected:
 		return true;
 	}
 	virtual void UpDateControll(void){
-		Clic_inPoint _clic=ctrlMouse.Get_LastClic();
-		Clic_inPoint _rel=ctrlMouse.Get_LastClicRelease();
-
-		if(XG_Component::Mouse_inArea(this->area_button)){
-			if(ctrlMouse.GetState_LeftButton()==true && XG_Component::Point_inArea(Point(ctrlMouse.Get_X(),ctrlMouse.Get_Y()),this->area_button)==true){
-				this->select=false;
-			}else{
-				this->select=true;
-			}
+		if(XG_Component::Mouse_inArea(this->area_button)==true && ctrlMouse.Get_Instance().GetState_LeftButton()==false){
+			this->select=true;
 		}else{
 			this->select=false;
 		}
-
-		if(ctrlMouse.GetState_LeftButton()==false){
-			if(_rel.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_rel.x_clic,_rel.y_clic),this->area_button)==true && XG_Component::Mouse_inArea(this->area_button)==true){
-				if(_clic.button_type_clic==TMB_LEFT && XG_Component::Point_inArea(Point(_clic.x_clic,_clic.y_clic),this->area_button)==true){
-					std::vector<XG_Evento<>>::iterator it;
-					for(it=this->eventi_on_clic.begin(); it!=this->eventi_on_clic.end(); it++){
-						(*it).ExequeEvent();
-					}
-				}
-			}
-		}
-		XG_Component::UpdateTrascinaObj(this->area_button);
 	}
 
 
@@ -115,6 +97,7 @@ public:		//METODI SET&GET
 			this->UnLoad();
 			this->Load();
 		}
+		this->Set_GrappableArea(Rect(Point(0,0),this->Get_W(),this->Get_H()));
 	}
 
 

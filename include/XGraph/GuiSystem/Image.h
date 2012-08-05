@@ -42,7 +42,7 @@ public:		//METODI SET/GET
 	/*Imposta il 'rettangolo di taglio' della texture. Praticamente l'immagine disegnata a video
 	sarà l'area espressa nel parametro della texture totale caricata.
 	Per valori di larghezza o altezza nulli verranno considerati quelli totali della texture*/
-	void SetCutArea(const Rect& setter =Rect()){
+	inline void SetCutArea(const Rect& setter =Rect()){
 		this->area_cut=setter;
 		if(this->area_cut.Get_W()==0){
 			this->area_cut.Set_W(this->_intSurface.Get_Width());
@@ -62,14 +62,14 @@ public:		//METODI SET/GET
 
 	/*Imposta l'area dello schermo in cui avverrà il disegno dell'immagine in questione
 	Le parti di immagine che si troveranno oltre l'area delimitata non verranno disegnate*/
-	void SetDrawnableArea(const Rect& setter){
+	inline void SetDrawnableArea(const Rect& setter){
 		this->area_vis=setter;
 	}	
-	const Rect& GetDrawnableArea(void) const{
+	inline const Rect& GetDrawnableArea(void) const{
 		return this->area_vis;
 	}
 	
-	void Set_Position(const Point& pp_point){
+	inline void Set_Position(const Point& pp_point){
 		this->pos=pp_point;
 	}
 	const Sint16 Get_Widht(void) const{
@@ -81,7 +81,7 @@ public:		//METODI SET/GET
 	const std::string& Get_LastError(void) const{
 		return this->last_error;
 	}
-	const Point& Get_Position(void) const{
+	inline const Point& Get_Position(void) const{
 		return this->pos;
 	}
 

@@ -16,22 +16,22 @@ public:		//COSTRUTTORI
 
 
 public:		//METODI SET&GET
-	void Set_Position(const Point& xy_position){
+	inline void Set_Position(const Point& xy_position){
 		this->_xy_=xy_position;
 	}
-	void Set_W(const Sint16& w_param){
+	inline void Set_W(const Sint16& w_param){
 		this->w=w_param;
 	}
-	void Set_H(const Sint16& h_param){
+	inline void Set_H(const Sint16& h_param){
 		this->h=h_param;
 	}
-	const Point& Get_Position(void) const{
+	inline const Point& Get_Position(void) const{
 		return this->_xy_;
 	}
-	const Sint16 Get_W(void) const{
+	inline const Sint16 Get_W(void) const{
 		return this->w;
 	}
-	const Sint16 Get_H(void) const{
+	inline const Sint16 Get_H(void) const{
 		return this->h;
 	}
 
@@ -41,7 +41,7 @@ public:		//METODI SET&GET
 public:		//FUNZIONI AGGIUNTIVE STATICHE
 	/*Verifica se due Rect sono sovrapposte.
 	Ritorna 'true' se la condizione è verificata, altrimenti false*/
-	static const bool Rect_Collide(const Rect& r1, const Rect& r2){
+	inline static const bool Rect_Collide(const Rect& r1, const Rect& r2){
 		if(SDL_CollideBoundingBox(r1, r2)){
 			return true;
 		}
@@ -50,7 +50,7 @@ public:		//FUNZIONI AGGIUNTIVE STATICHE
 
 	/*TODO: verificare! (da fare test!)
 	Ritorna l'intersezione tra due rettangoli*/
-	static const bool Rects_Intersect(const Rect& op1, const Rect& op2, Rect& _out_result){
+	inline static const bool Rects_Intersect(const Rect& op1, const Rect& op2, Rect& _out_result){
 		if(Rect::Rect_Collide(op1,op2)==true) {  
 			_out_result._xy_.Set_X(Point::Rts_Max(op1._xy_.Get_X(), op2._xy_.Get_X()));
 			_out_result._xy_.Set_Y(Point::Rts_Max(op1._xy_.Get_Y(), op2._xy_.Get_Y()));
