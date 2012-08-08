@@ -1,98 +1,83 @@
-#ifndef __XG_WINDOW_CONTAINER
-#define __XG_WINDOW_CONTAINER
+#ifndef __XG_WINDOW__GUI
+#define __XG_WINDOW__GUI
 
 #include <XGraph/GuiSystem/XG_Container.h>
 
 class XG_Window: public XG_Container{
-public:		//COSTRUTTORI
-	XG_Window(const Sint16 SizeW, const Sint16 SizeH){
-		this->SetSize(SizeW,SizeH);
-		this->Set_Visible(true);
-		this->Set_Moveable(true);
+public:
+	XG_Window(const int w_size=0, const int h_size=0){
+		this->SetSize(w_size,h_size);
 	}
-public:		//INTERFACCIA COMPONENTE GRAFICO
-	virtual const bool Load(void);
-	virtual void UnLoad(void){
-		XG_Container::UnLoad();
-		this->render_win.UnLoad();
-	}
-	virtual void SetDrawnableArea(const Rect& setter){
-		XG_Container::SetDrawnableArea(setter);
-		this->render_win.SetDrawnableArea(setter);
-		this->Set_GrappableArea(Rect(Point(0,0),this->Get_W(),XG_Window::h_corner));
-	}
-	virtual const Rect& GetDrawnableArea(void) const{
-		return this->render_win.GetDrawnableArea();
-	}
-	virtual const bool Is_Load(void) const{
-		return this->render_win.Is_Load();
-	}
-	virtual void Set_Position(const Point& setter){
-		this->form_win.Set_Position(setter);
-		this->render_win.Set_Position(setter);
-
-		this->UpDateAreaActive(Rect(this->Get_Position() + Point(3,XG_Window::h_corner),this->Get_W()-6,this->Get_H()-XG_Window::h_corner-3));
-		this->Set_GrappableArea(Rect(Point(0,0),0,XG_Window::h_corner));
-	}
-	virtual void Set_Alpha(const Uint8 setter){
-		this->render_win.Set_Alpha(setter);
-	}
-	virtual const Point& Get_Position(void) const{
-		return this->form_win.Get_Position();
-	}
-	virtual const Sint16 Get_W(void) const{
-		return this->form_win.Get_W();
-	}
-	virtual const Sint16 Get_H(void) const{
-		return this->form_win.Get_H();
-	}
-	protected:
-	virtual void UpDateControll(void){
-
-	}
-	virtual const bool Drawn(void){
-		if(this->visible && this->Is_Load()==true){
-			return this->render_win.Drawn();
+public:		//INTERFACCIA CONTENITORE
+	virtual const bool Load(XG_Container* =NULL);	
+	virtual void UnLoad(void);				
+	virtual const int Get_W(void) const{
+		if(this->render.Is_Load()){
+			return this->render.Get_Widht();
 		}
-		return true;
+		return 0;
+	}
+	virtual const int Get_H(void) const{
+		if(this->render.Is_Load()){
+			return this->render.Get_Height();
+		}
+		return 0;
+	}
+	void SetSize(const int w_size, const int h_size){
+		if(w_size==this->w && h_size==this->h) return;
+		this->w=w_size;
+		this->h=h_size;
+		if(this->w < XG_Window::w_corner*2+1){
+			this->w = XG_Window::w_corner*2+1;
+		}
+		if(this->h < XG_Window::h_corner*2+1){
+			this->h = XG_Window::h_corner*2+1;
+		}
+		this->Set_AreaGrappableRelative(Rect(Point(0,0),this->w,XG_Window::h_corner));
+		this->Set_ActiveAreaRelative(Rect(Point(2,XG_Window::h_corner),this->w-4,this->h-XG_Window::h_corner-3));
+		if(this->render.Is_Load()){
+			this->UpDateRender();
+		}
+	}
+	virtual void SetAlpha(const Uint8 setter){
+		XG_Container::SetAlpha(setter);
+		this->render.Set_Alpha(setter);
 	}
 
-public:		//METODI SET&GET
-	void SetSize(const Sint16 w_setter, const Sint16 h_setter){
-		if(w_setter==this->form_win.Get_W() && h_setter==this->form_win.Get_H()){
-			return;
+private:	//INTERFACCIA CONTENITORE (PRIVATA)
+	virtual const bool Check_Focus(const XG_Event_Input& _event){
+		if(XG_Container::Check_Focus(_event)==true){
+			return true;
 		}
-		this->form_win.Set_W(w_setter);
-		this->form_win.Set_H(h_setter);
-		if(this->form_win.Get_W()< XG_Window::w_corner*2+1){
-			this->form_win.Set_W(XG_Window::w_corner*2+1);
+		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true){
+			return true;
 		}
-		if(this->form_win.Get_H() < XG_Window::h_corner*2+1){
-			this->form_win.Set_H(XG_Window::h_corner*2+1);
+		return false;
+	}
+	virtual const bool Drawn_Component(void){
+		bool status=true;
+		this->render.Set_Position(this->Get_AbsolutePosition());
+		this->render.SetDrawnableArea(this->Get_DrawnableAreaAbsolute());
+		if(this->render.Drawn()==false){
+			this->AddError_toLOG(this->render.Get_LastError());
+			status=false;
 		}
-		if(this->Is_Load()){
-			this->UnLoad();
-			this->Load();
+		if(XG_Container::Drawn_Component()==false){
+			return false;
 		}
-
-		this->UpDateAreaActive(Rect(this->Get_Position() + Point(3,XG_Window::h_corner),this->Get_W()-6,this->Get_H()-XG_Window::h_corner-3));
-		this->Set_GrappableArea(Rect(Point(0,0),this->Get_W(),XG_Window::h_corner));
+		return status;
 	}
 
+private:	//FUNZIONI DI SUPPORTO PRIVATE
+	const bool UpDateRender(void);
 
+private:	//DATA
+	Image render;
+	int w;
+	int h;
 
-private:	//PRIVATE DATA
-	Image render_win;
-	Rect form_win;
-
-private:	//FUNZIONI PRIVATE
-	inline void UpDateAreaActive(const Rect& setter){
-		this->area_form_drawnable=setter;
-	}
-
-private:	//COSTANTI DI CLASSE
-	static const Sint16 w_corner;
-	static const Sint16 h_corner;
+	static const int w_corner;
+	static const int h_corner;
 };
 
 #endif

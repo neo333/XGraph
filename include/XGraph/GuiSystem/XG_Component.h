@@ -1,85 +1,155 @@
 #ifndef __COMPONENT__GUI
 #define __COMPONENT__GUI
 
-#include <XGraph/GuiSystem/Image.h>
-#include <XGraph/InputSystem/Mouse.h>
 #include <string>
+#include <XGraph/GuiSystem/Image.h>
+#include <XGraph/GuiSystem/XG_Event_Input.h>
+#include <XGraph/InputSystem/Mouse.h>
 
 class XG_Container;
 
 class XG_Component{
-public:		//COSTRUTTORE
-	XG_Component(void):moveable(false),agganciato(false),visible(true),active_controll(true){
+public:		//COSTRUTTORE & DISTRUTTORE
+	XG_Component(void):xgContainer_handler(NULL),moveable(false),agganciato(false){
+		this->Set_Visibile(true);
 	}
+	~XG_Component(void){
+		if(this->Is_Load()==true){
+			this->UnLoad();
+		}
+	}
+public:		//INTERFACCIA	UTENTE
+	virtual const bool Load(XG_Container* =NULL);		//<<<-----
+	virtual void UnLoad(void);							//		  |
+	virtual const int Get_W(void) const=0;				//		  |---FUNZIONI VIRTUALI DA SPECIALIZZARE
+	virtual const int Get_H(void) const=0;				//		  |
+	virtual void SetAlpha(const Uint8) =0;				//<<<-----
 
-public:		//INTERFACCIA COMPONENTE GRAFICO
-	virtual const bool Load(void) =0;
-	virtual void UnLoad(void) =0;
-	virtual void SetDrawnableArea(const Rect&) =0;
-	virtual const Rect& GetDrawnableArea(void) const=0;
-	virtual const bool Is_Load(void) const=0;
-	virtual const std::string& Get_LastError(void) const=0;
-	virtual void Set_Position(const Point&) =0;
-	virtual const Point& Get_Position(void) const =0;
-	virtual const Sint16 Get_W(void) const =0;
-	virtual const Sint16 Get_H(void) const =0;
-	virtual void Set_Alpha(const Uint8) =0;
-	virtual void Set_Moveable(const bool setter){
-		this->moveable=setter;
+	virtual const bool Is_Load(void) const{
+		if(this->xgContainer_handler) return true;
+		return false;
 	}
-	virtual void Set_Visible(const bool setter){
+	inline void Set_Position_Relative(const Point& setter){
+		this->xy_relative_position=setter;
+	}
+	inline const Point& Get_Position_Relative(void) const{
+		return this->xy_relative_position;
+	}
+	inline void Set_Visibile(const bool setter){
 		this->visible=setter;
 	}
-	virtual inline const bool Get_Visible(void) const{
-		return this->visible;
+	inline void Set_Moveable(const bool setter){
+		this->moveable=setter;
 	}
-	virtual const bool Get_Moveable(void){
-		return this->moveable;
+	inline const std::string& Get_LogError(void) const{
+		return this->_logError;
 	}
-	virtual const bool Run(void){
-		if(this->visible==true && this->Is_Load()){
-			if(this->active_controll==true){
-				this->UpDateControll();
-				this->UpdateTrascinaObj();
+
+protected:	//INTERFACCIA INTERNA	(LEGGERE! DA RISPETTARE!!)
+	inline const Point& Get_AbsolutePosition(void) const{	//ritorna le coordinate assolute dell'oggetto
+		return this->xy_absolute_position_on_screen;		//questa funzione va chiamata dagli oggetti implementati
+															//per eseguire le operazioni di disegno
+	}
+	inline const Rect& Get_DrawnableAreaAbsolute(void) const{		//ritorna l'area di disegno nel quale è possibile
+		return this->drawable_area_total;					//disegnare il componente.
+															//questa funzione va chiamata ad ogni operazione di disegno
+	}
+	inline void Set_AreaGrappableRelative(const Rect& setter){		//questa funzione setta l'area RELATIVA
+		this->area_grappable=setter;								//dove è possibile cliccare sull'oggetto per trascinarlo
+																	//questa funzione andrebbe chiamata ad ogni dimensionamento
+																	//dell'oggetto
+	}
+	inline void AddError_toLOG(const std::string& line){
+		this->_logError+=line;
+		this->_logError+="\n";
+	}
+
+protected:	//CONTROLLO & DISEGNO
+	virtual const bool Check_Focus(const XG_Event_Input& _event){
+		/*
+				Check focus è una funzione deve ritornare 'TRUE' se il componente RICHIEDE l'aggiornamento
+				dei controlli (funzione EXEQUE_CONTROLL). altrimenti ritornetà 'FALSE' e in quel caso l'aggiornamento
+				dei controlli non verrà eseguito (ma solo la funzione di disegno).
+
+				Questa funzione verrà chiamata SEMPRE a RUN-LOOP!
+		*/
+		if(moveable==true){
+			if(this->agganciato==true){
+				return true;
+			}else{
+				if(_event._mousepress.bottone==XG_Event_Input::LEFT && XG_Component::Mouse_inArea(this->area_grappable + this->Get_AbsolutePosition())){
+					this->agganciato_point.Set_X(Mouse::Get_Instance().Get_X());
+					this->agganciato_point.Set_Y(Mouse::Get_Instance().Get_Y());
+					this->agganciato=true;
+					return true;
+				}
 			}
-			return this->Drawn();
+		}else{
+			this->agganciato=false;
 		}
-		return true;
+		return false;
 	}
-protected:
+	virtual void Exeque_Controll(const XG_Event_Input& _event){
+		this->UpDateTrascinamento(_event);
+	}
+	virtual const bool Drawn_Component(void) =0;		//Funzione di disegno chiamato a RUN-LOOP
+														//sempre, ammenoché la visibilità dell'oggetto sia 'FALSE'
 
-	/*Chiama alla funzione di controllo dell'oggetto RUN-LOOP se il componente ha focus*/
-	virtual void UpDateControll(void) =0;
-
-	/*Funzione di disegno pura. Viene chiamata a 'RUN-LOOP' se e solo se il componente è settato come 'VISIBILE'.
-	Disegna il componente*/
-	virtual const bool Drawn(void) =0;
+protected:	//DATI INTERNI
+	Point xy_relative_position;
 
 
-protected:	//FUNZIONI DI SUPPORTO
-	/*Costruisce il rendering di un componente grafico utilizzando l'algoritmo della scomposizione di matrice
-	(l'immagine del componente sarà composta da 9 parti: angolo alto sinistro, alto centrale, alto destro, centrale sinistro,
-	centrale centrale, centrale destro, sotto sinistro, sotto centrale, sotto destro)
-	NOTA: per maggiori informazioni leggere il file sorgente (.cpp) associato.*/
+
+
+
+
+
+protected:		//FUNZIONI STATICHE DI SUPPORTO
+	/*Funzione per la costruzione di un componente grafico usando l'algoritmo di costruzione 'Matrice3x3'*/
 	static const bool CompositeObjectGraphic(const Texture& source, const Sint16 w_corner, const Sint16 h_corner, 
 		const Sint16 w_size, const Sint16 h_size, Image& _out);
-
 	
-	/*Ritorna 'true' se il Mouse si trova all'interno dell'area specificata, altrimenti ritorna 'false'*/
-	inline static const bool Mouse_inArea(const Rect& area){
-		return XG_Component::Point_inArea(Point(ctrlMouse.Get_X(),ctrlMouse.Get_Y()),area);
+
+	inline void UpDateTrascinamento(const XG_Event_Input& _in){
+		/*UPDATE TRASCINAMENTO!*/
+		if(this->agganciato==true){
+			if(Mouse::Get_Instance().GetState_LeftButton()==false || XG_Component::Mouse_inArea(this->Get_DrawnableAreaAbsolute())==false){
+				this->agganciato=false;
+			}else{
+				Point mouse_point(Mouse::Get_Instance().Get_X(),Mouse::Get_Instance().Get_Y());
+				this->Set_Position_Relative(this->Get_Position_Relative() + (mouse_point - this->agganciato_point));
+				this->agganciato_point=mouse_point;
+			}
+		}
 	}
 
-	/*Ritorna 'true' se il Punto si trova all'interno dell'area specificata, altrimenti ritorna 'false'*/
-	inline static const bool Point_inArea(const Point xy, const Rect& area){
-		const Sint16& x_p=xy.Get_X();
-		const Sint16& y_p=xy.Get_Y();
-		
+
+	inline static const bool Mouse_inArea(const Rect& area){		//Ritorna 'true' se il mouse si trova nell'area indicata
+		const Sint16& x_p=Mouse::Get_Instance().Get_X();			//dal parametro.
+		const Sint16& y_p=Mouse::Get_Instance().Get_Y();			//
+																	//In real Time!
 		const Sint16& x_r=area.Get_Position().Get_X();
 		const Sint16& y_r=area.Get_Position().Get_Y();
 		const Sint16& w_r=area.Get_W();
 		const Sint16& h_r=area.Get_H();
 
+		if(x_p >= x_r && x_p <= x_r + w_r){
+		if(y_p >= y_r && y_p <= y_r + h_r){
+		return true;
+		}
+		}
+		return false;
+	}
+
+	inline static const bool Point_inArea(const Point& point, const Rect& area){
+		const Sint16& x_p=point.Get_X();	
+		const Sint16& y_p=point.Get_Y();	
+															
+		const Sint16& x_r=area.Get_Position().Get_X();
+		const Sint16& y_r=area.Get_Position().Get_Y();
+		const Sint16& w_r=area.Get_W();
+		const Sint16& h_r=area.Get_H();
+		
 		if(x_p >= x_r && x_p <= x_r + w_r){
 			if(y_p >= y_r && y_p <= y_r + h_r){
 				return true;
@@ -87,42 +157,26 @@ protected:	//FUNZIONI DI SUPPORTO
 		}
 		return false;
 	}
-
-	inline void Set_GrappableArea(const Rect& setter){
-		this->area_grappable=setter;
-	}
-
-private:	//PRIVATE DATA
+private:		//DATI PRIVATI
 	friend class XG_Container;
-	bool moveable;
 	bool visible;
-	bool agganciato;
-	Point clic_agganciato;
-	bool active_controll;	//blocca i controlli sul componente(viene utilizzato dai container per gestire le priorità di input)
-	Rect area_grappable;
-
-private:	//FUNZIONI DI SUPPORTO COMPONENTI
-	inline void UpdateTrascinaObj(void){
-		if(this->moveable && XG_Component::Mouse_inArea(this->GetDrawnableArea())==true){
-			if(this->agganciato){
-				if(ctrlMouse.GetState_LeftButton()==false){
-					this->agganciato=false;
-				}else{
-					this->Set_Position(this->Get_Position() + Point(ctrlMouse.Get_X() - this->clic_agganciato.Get_X(), ctrlMouse.Get_Y() - this->clic_agganciato.Get_Y()));
-					this->clic_agganciato.Set_X(ctrlMouse.Get_X());
-					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
-				}
-			}else{
-				if(ctrlMouse.Get_Instance().GetState_LeftButton()==true && XG_Component::Mouse_inArea(this->area_grappable + this->Get_Position())==true){
-					this->agganciato=true;
-					this->clic_agganciato.Set_X(ctrlMouse.Get_X());
-					this->clic_agganciato.Set_Y(ctrlMouse.Get_Y());
-				}
-			}
-		}else{
-			this->agganciato=false;
-		}
+	Point xy_absolute_position_on_screen;		//coordinate di posizione dell'oggetto assolute.
+												//vengono settate dal container
+	XG_Container* xgContainer_handler;			//puntatore al contenitore associato
+	Rect drawable_area_total;					//area di disengo settata dal conteiner
+	virtual void SubDrawnableAreaTOTAL(const Rect& setter){
+		Rect _result;
+		Rect::Rects_Intersect(this->drawable_area_total,setter,_result);
+		this->drawable_area_total=_result;
 	}
+	virtual void SetDrawnableAreaTOTAL(const Rect& setter){
+		this->drawable_area_total=setter;
+	}
+	Rect area_grappable;						//area di grap
+	std::string _logError;						//log di errore
+	bool moveable;
+	bool agganciato;
+	Point agganciato_point;
 };
 
 #endif

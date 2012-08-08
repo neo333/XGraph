@@ -1,4 +1,6 @@
 #include <XGraph/GuiSystem/XG_Component.h>
+#include <XGraph/GuiSystem/XG_Container.h>
+#include <XGraph/GuiSystem/XG_Screen.h>
 
 /*		
 
@@ -108,4 +110,22 @@ const bool XG_Component::CompositeObjectGraphic(const Texture& source, const Sin
 	_out = Image(render);
 	_out.Set_ColorKey(Color(0,0,0));
 	return true;
+}
+
+
+const bool XG_Component::Load(XG_Container* handler){
+	this->xgContainer_handler=handler;
+	if(this->xgContainer_handler==NULL){
+		this->xgContainer_handler=&XG_Screen::Get_Instance();
+	}
+	this->xgContainer_handler->Add_Controll_toThisContainer(this);
+	this->SetAlpha(this->xgContainer_handler->_alphaMEM);
+	return true;
+}
+
+void XG_Component::UnLoad(void){
+	if(this->xgContainer_handler){
+		this->xgContainer_handler->Del_Controll_toThisContainer(this);
+		this->xgContainer_handler=NULL;
+	}
 }

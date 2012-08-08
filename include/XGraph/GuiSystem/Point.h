@@ -4,6 +4,7 @@
 
 #include <SDL/SDL.h>
 #include <cmath>
+#include <iostream>
 
 class Point{
 private:		//PRIVATE: DATA
@@ -43,13 +44,17 @@ public:		//OPERATORI
 		return false;
 	}
 
-	Point operator+(const Point& oth) const{
+	inline Point operator+(const Point& oth) const{
 		Point rts=*this;
 		rts.x+=oth.x;
 		rts.y+=oth.y;
 		return rts;
 	}
-	Point operator-(const Point& oth) const{
+	inline void operator+=(const Point& oth) {
+		this->x+=oth.x;
+		this->y+=oth.y;
+	}
+	inline Point operator-(const Point& oth) const{
 		Point rts=*this;
 		rts.x-=oth.x;
 		rts.y-=oth.y;
@@ -78,11 +83,9 @@ public:		//FUNZIONI STATICHE aggiuntive
 
 
 
-
-
-
-
-
+	friend std::ostream& operator<<(std::ostream&,const Point&);
 };
+
+std::ostream& operator<<(std::ostream&,const Point&);
 
 #endif

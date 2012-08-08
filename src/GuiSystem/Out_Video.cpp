@@ -1,4 +1,5 @@
 #include <XGraph/GuiSystem/OutVideo.h>
+#include <XGraph/GuiSystem/XG_Screen.h>
 
 const Uint32 OutVideo::sdl_flag_need=SDL_INIT_TIMER| SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTTHREAD;
 
@@ -34,4 +35,30 @@ void OutVideo::CloseSDL_FORCE(void){
 	if(OutVideo::Check_SDLINIT()==true){
 		SDL_Quit();
 	}
+}
+
+
+
+bool OutVideo::Create_Window(const Setting_Window& set){
+	OutVideo::OpenSDL_FORCE();
+	Uint32 flag=SDL_HWSURFACE | SDL_ANYFORMAT | SDL_DOUBLEBUF;
+	if(set.fullscreen){
+		flag=flag | SDL_FULLSCREEN;
+	}
+	this->_screen=SDL_SetVideoMode(set.width,set.height,set.bpp,flag);
+	if(this->_screen.Is_Load()==false){
+		this->last_error="Impossibile inizializzare la finestra grafica!\n";
+		this->last_error+=SDL_GetError();
+		return false;
+	}
+	this->w_screen=(Sint16)(set.width);
+	this->h_screen=(Sint16)(set.height);
+	XG_Screen::Get_Instance().Load(NULL);
+	return true;
+}
+void OutVideo::Destroy_Window(void){
+	XG_Screen::Get_Instance().UnLoad();
+	this->_screen.Delete();
+	this->w_screen=0;
+	this->h_screen=0;
 }

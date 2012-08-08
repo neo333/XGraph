@@ -90,7 +90,9 @@ public:			//OPERATORI
 		return Rect(this->_xy_ + oth._xy_, this->w + oth.w, this->h + oth.h);
 	}
 
-
+	Rect operator+(const Point& oth) const{
+		return Rect(this->_xy_ + oth, this->w, this->h);
+	}
 
 
 

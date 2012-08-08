@@ -22,7 +22,7 @@ struct Clic_inPoint{
 
 class Mouse{
 public:		//ACCESS
-	static Mouse& Get_Instance(void){
+	inline static Mouse& Get_Instance(void){
 		if(Mouse::m_pInstance==NULL){
 			Mouse::m_pInstance=new Mouse();
 			assert(Mouse::m_pInstance);
@@ -38,13 +38,13 @@ public:		//GET REAL-TIME STATE MOUSE
 		return this->y;
 	}
 
-	const bool GetState_LeftButton(void) const{
+	inline const bool GetState_LeftButton(void) const{
 		return this->_bleft;
 	}
-	const bool GetState_MiddleButton(void) const{
+	inline const bool GetState_MiddleButton(void) const{
 		return this->_bmiddle;
 	}
-	const bool GetState_RightButton(void) const{
+	inline const bool GetState_RightButton(void) const{
 		return this->_bright;
 	}
 	

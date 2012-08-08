@@ -41,27 +41,8 @@ public:		//INIZIALIZZATORI
 	NOTA:
 		Questa funzione controlla se la libreria SDL è stata inizializzata, in caso negativo
 		proverà una forzatura nell'inizializzazione della stessa*/
-	bool Create_Window(const Setting_Window& set){
-		OutVideo::OpenSDL_FORCE();
-		Uint32 flag=SDL_HWSURFACE | SDL_ANYFORMAT | SDL_DOUBLEBUF;
-		if(set.fullscreen){
-			flag=flag | SDL_FULLSCREEN;
-		}
-		this->_screen=SDL_SetVideoMode(set.width,set.height,set.bpp,flag);
-		if(this->_screen.Is_Load()==false){
-			this->last_error="Impossibile inizializzare la finestra grafica!\n";
-			this->last_error+=SDL_GetError();
-			return false;
-		}
-		this->w_screen=(Sint16)(set.width);
-		this->h_screen=(Sint16)(set.height);
-		return true;
-	}
-	void Destroy_Window(void){
-		this->_screen.Delete();
-		this->w_screen=0;
-		this->h_screen=0;
-	}
+	bool Create_Window(const Setting_Window&);
+	void Destroy_Window(void);
 	void Set_TitleWindow(const std::string& setter){
 		SDL_WM_SetCaption(setter.c_str(), NULL);
 	}
@@ -84,6 +65,9 @@ public:		//METODI GET&SET
 	const Uint8 Get_BitPerPixel_Depth(void) const{
 		const SDL_Surface* _p=this->_screen;
 		return _p->format->BitsPerPixel;
+	}
+	inline const bool Is_Load(void) const{
+		return this->_screen.Is_Load();
 	}
 
 
