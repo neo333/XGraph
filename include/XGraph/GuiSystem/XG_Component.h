@@ -3,6 +3,7 @@
 
 #include <string>
 #include <XGraph/GuiSystem/Image.h>
+#include <XGraph/GuiSystem/Text.h>
 #include <XGraph/GuiSystem/XG_Event_Input.h>
 #include <XGraph/InputSystem/Mouse.h>
 

@@ -1,5 +1,6 @@
 #include <XGraph/GuiSystem/OutVideo.h>
 #include <XGraph/GuiSystem/XG_Screen.h>
+#include <SDL/SDL_ttf.h>
 
 const Uint32 OutVideo::sdl_flag_need=SDL_INIT_TIMER| SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTTHREAD;
 
@@ -21,7 +22,7 @@ OutVideo& OutVideo::operator=(const OutVideo& oth){
 
 const bool OutVideo::Check_SDLINIT(void){
 	Uint32 resp=SDL_WasInit(OutVideo::sdl_flag_need);
-	if(resp&OutVideo::sdl_flag_need){
+	if(resp&OutVideo::sdl_flag_need && TTF_WasInit()==1){
 		return true;
 	}
 	return false;
@@ -29,10 +30,12 @@ const bool OutVideo::Check_SDLINIT(void){
 void OutVideo::OpenSDL_FORCE(void){
 	if(OutVideo::Check_SDLINIT()==false){
 		SDL_Init(OutVideo::sdl_flag_need);
+		TTF_Init();
 	}
 }
 void OutVideo::CloseSDL_FORCE(void){
 	if(OutVideo::Check_SDLINIT()==true){
+		TTF_Quit();
 		SDL_Quit();
 	}
 }

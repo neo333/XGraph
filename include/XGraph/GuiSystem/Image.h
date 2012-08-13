@@ -321,7 +321,7 @@ public:			//FUNZIONI STATICHE AGGIUNTIVE
 
 
 
-private:		//PRIVATE: DATA
+protected:		//PRIVATE: DATA
 	Texture _intSurface;
 	Rect area_cut;
 	Point pos;
