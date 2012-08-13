@@ -72,7 +72,7 @@ public:		//METODI GET&SET
 
 
 public:		//REFRESH SCHERMO
-	const bool UpDateScreen(void){
+	inline const bool UpDateScreen(void){
 		static unsigned int _fps_var=0;
 		static Uint32 time_curr=0;
 

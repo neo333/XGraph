@@ -48,6 +48,9 @@ private:	//INTERFACCIA CONTENITORE (PRIVATA)
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
 		if(XG_Container::Check_Focus(_event)==true){
 			return true;
+		}	
+		if(_event._mousepress.bottone==XG_Event_Input::LEFT && XG_Component::Mouse_inArea(Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))){
+			return true;
 		}
 		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true){
 			return true;

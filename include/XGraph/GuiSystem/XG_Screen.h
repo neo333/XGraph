@@ -23,11 +23,7 @@ public:		//INTERFACCIA COMPONENT
 
 public:		//INTERFACCIA COMPONENT (PRIVATA)
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
-		if(XG_Container::Check_Focus(_event)==true) return true;
-		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(Point(0,0),this->Get_W(),this->Get_H()))==true){
-			return true;
-		}
-		return false;
+		return XG_Container::Check_Focus(_event);
 	}
 
 public:		//SINGLETON ACCESS

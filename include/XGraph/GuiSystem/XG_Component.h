@@ -45,6 +45,10 @@ public:		//INTERFACCIA	UTENTE
 		return this->_logError;
 	}
 
+	/*Ritorna 'true' se l'oggetto si trova in un CONTAINER (contenitore) che è in focus,
+	o 'top'*/
+	const bool Object_onTop(void) const;
+
 protected:	//INTERFACCIA INTERNA	(LEGGERE! DA RISPETTARE!!)
 	inline const Point& Get_AbsolutePosition(void) const{	//ritorna le coordinate assolute dell'oggetto
 		return this->xy_absolute_position_on_screen;		//questa funzione va chiamata dagli oggetti implementati
@@ -124,21 +128,10 @@ protected:		//FUNZIONI STATICHE DI SUPPORTO
 	}
 
 
-	inline static const bool Mouse_inArea(const Rect& area){		//Ritorna 'true' se il mouse si trova nell'area indicata
-		const Sint16& x_p=Mouse::Get_Instance().Get_X();			//dal parametro.
-		const Sint16& y_p=Mouse::Get_Instance().Get_Y();			//
-																	//In real Time!
-		const Sint16& x_r=area.Get_Position().Get_X();
-		const Sint16& y_r=area.Get_Position().Get_Y();
-		const Sint16& w_r=area.Get_W();
-		const Sint16& h_r=area.Get_H();
-
-		if(x_p >= x_r && x_p <= x_r + w_r){
-		if(y_p >= y_r && y_p <= y_r + h_r){
-		return true;
-		}
-		}
-		return false;
+	inline static const bool Mouse_inArea(const Rect& area){
+		/*Ritorna 'true' se il Mouse si trova nell'area indicata.
+		Funzione REAL-TIME!*/
+		return XG_Component::Point_inArea(Point(Mouse::Get_Instance().Get_X(),Mouse::Get_Instance().Get_Y()),area);
 	}
 
 	inline static const bool Point_inArea(const Point& point, const Rect& area){

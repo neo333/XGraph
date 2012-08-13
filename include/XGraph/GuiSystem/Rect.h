@@ -48,8 +48,7 @@ public:		//FUNZIONI AGGIUNTIVE STATICHE
 		return false;
 	}
 
-	/*TODO: verificare! (da fare test!)
-	Ritorna l'intersezione tra due rettangoli*/
+	/*Ritorna l'intersezione tra due rettangoli*/
 	inline static const bool Rects_Intersect(const Rect& op1, const Rect& op2, Rect& _out_result){
 		if(Rect::Rect_Collide(op1,op2)==true) {  
 			_out_result._xy_.Set_X(Point::Rts_Max(op1._xy_.Get_X(), op2._xy_.Get_X()));

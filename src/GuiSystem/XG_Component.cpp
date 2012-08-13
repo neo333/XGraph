@@ -129,3 +129,10 @@ void XG_Component::UnLoad(void){
 		this->xgContainer_handler=NULL;
 	}
 }
+
+const bool XG_Component::Object_onTop(void) const{
+	if(this->xgContainer_handler){
+		return this->xgContainer_handler->inFocus;
+	}
+	return false;
+}

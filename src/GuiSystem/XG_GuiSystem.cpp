@@ -27,8 +27,8 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 		}else{
 			this->last_input._mouserel.bottone=XG_Event_Input::LEFT;
 			this->last_input._mouseclic.bottone=XG_Event_Input::LEFT;
-			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_LastClic().x_clic);
-			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_LastClic().y_clic);
+			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_X());
+			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_Y());
 		}
 		this->m_left_but=button_check;
 		status=true;
@@ -42,8 +42,8 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 		}else{
 			this->last_input._mouserel.bottone=XG_Event_Input::RIGHT;
 			this->last_input._mouseclic.bottone=XG_Event_Input::RIGHT;
-			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_LastClic().x_clic);
-			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_LastClic().y_clic);
+			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_X());
+			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_Y());
 		}
 		this->m_right_but=button_check;
 		status=true;
@@ -57,8 +57,8 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 		}else{
 			this->last_input._mouserel.bottone=XG_Event_Input::MIDDLE;
 			this->last_input._mouseclic.bottone=XG_Event_Input::MIDDLE;
-			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_LastClic().x_clic);
-			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_LastClic().y_clic);
+			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_X());
+			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_Y());
 		}
 		this->m_middle_but=button_check;
 		status=true;

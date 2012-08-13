@@ -64,12 +64,13 @@ protected:	//DISEGNO&CONTROLLO
 			return true;
 		}
 		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))&& XG_Component::Mouse_inArea(this->Get_DrawnableAreaAbsolute())){
+			//clic!
 			return true;
 		}
 		return false;
 	}
 	virtual void Exeque_Controll(const XG_Event_Input& _event){
-		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H())) && XG_Component::Mouse_inArea(this->Get_DrawnableAreaAbsolute())){
+		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))&& XG_Component::Mouse_inArea(this->Get_DrawnableAreaAbsolute())){
 			std::vector<XG_Event<XG_Component>>::iterator it;
 			for(it=this->operation_on_lic.begin(); it!=this->operation_on_lic.end(); it++){
 				if((*it).Exe()==false){
@@ -80,7 +81,7 @@ protected:	//DISEGNO&CONTROLLO
 		XG_Component::Exeque_Controll(_event);
 	}
 	virtual const bool Drawn_Component(void){
-		if(XG_Component::Mouse_inArea(Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true && Mouse::Get_Instance().GetState_LeftButton()==false && XG_Component::Mouse_inArea(this->Get_DrawnableAreaAbsolute())==true){
+		if(XG_Component::Mouse_inArea(Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true && Mouse::Get_Instance().GetState_LeftButton()==false && XG_Component::Mouse_inArea(this->Get_DrawnableAreaAbsolute())==true && this->Object_onTop()==true){
 			this->select=true;
 		}else{
 			this->select=false;
