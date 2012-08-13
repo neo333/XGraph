@@ -19,8 +19,8 @@ public:		//COSTRUTTORE
 public:		//INTERFACCIA UTENTE
 	virtual const bool Load(XG_Container* adder=NULL){
 		this->UnLoad();
-		bool status= this->UpDateRender();
 		XG_Component::Load(adder);
+		bool status= this->UpDateRender();
 		return status;
 	}
 	virtual void UnLoad(void){

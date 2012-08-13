@@ -6,13 +6,14 @@ const int XG_Window::h_corner =20;
 
 const bool XG_Window::Load(XG_Container* agg){
 	bool status;
+	XG_Container::Load(agg);
 	this->SetSize(this->w,this->h);
 	status=this->UpDateRender();
-	XG_Container::Load(agg);
 	return status;
 }
 void XG_Window::UnLoad(void){
 	XG_Container::UnLoad();
+	this->render.UnLoad();
 }
 
 const bool XG_Window::UpDateRender(void){

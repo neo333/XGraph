@@ -76,6 +76,8 @@ const bool XG_GuiSystem::Run(void){
 
 	this->UpDateAllInput();
 
+	this->CheckDynamicComponent();
+
 	XG_Container* _screenpnt= &XG_Screen::Get_Instance();
 	if(_screenpnt->Check_Focus(this->last_input)==true){
 		_screenpnt->Exeque_Controll(this->last_input);
@@ -86,4 +88,16 @@ const bool XG_GuiSystem::Run(void){
 		return false;
 	}
 	return true;
+}
+
+void XG_GuiSystem::CheckDynamicComponent(void){
+	ITERATORE_DINAMICI it;
+	for(it=this->dynamic_component.begin(); it!=this->dynamic_component.end(); ){
+		if((*it).first->force_close==true){
+			delete (*it).first;
+			it=this->dynamic_component.erase(it);
+		}else{
+			it++;
+		}
+	}
 }

@@ -48,7 +48,15 @@ public:			//INTERFACCIA UTENTE
 	inline const bool Is_InFocus(void) const{
 		return this->inFocus;
 	}
-
+	virtual void UnLoad(void){
+		ITERATORE it;
+		it=this->handled_component.begin();
+		while(it!=this->handled_component.end()){
+			(*it)->UnLoad();
+			it=this->handled_component.begin();
+		}
+		XG_Component::UnLoad();
+	}
 
 
 protected:		//INTERFACCIA INTERNA
@@ -73,7 +81,7 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 		bool _first=true;
 		for(it=this->handled_component.rbegin(); it!=this->handled_component.rend(); it++){
 			_current=(*it);
-			
+
 			/*preparo le posizioni e le aree di disengo*/
 			if(this->is_root){
 				_current->SetDrawnableAreaTOTAL(Rect(Point(0,0),OutVideo::Get_Instance().Get_W_Screen(),OutVideo::Get_Instance().Get_H_Screen()));
@@ -203,7 +211,6 @@ private:		//GESTIONE AGGREGATI
 			(*it)->SubDrawnableAreaTOTAL(setter);		
 		}
 	}
-
 private:		//FUNZIONI DI SUPPORTO INTERNE
 	inline const bool Find_Obj(XG_Component* search, ITERATORE& _out){
 		for(_out=this->handled_component.begin(); _out!=this->handled_component.end(); _out++){

@@ -2,11 +2,16 @@
 #define __XG_WINDOW__GUI
 
 #include <XGraph/GuiSystem/XG_Container.h>
+#include <XGraph/GuiSystem/XG_GuiSystem.h>
 
 class XG_Window: public XG_Container{
-public:
+public:		//COSTRUTTORE
 	XG_Window(const int w_size=0, const int h_size=0){
 		this->SetSize(w_size,h_size);
+	}
+
+	inline static XG_Window* MakeWindow(const int w_size=0, const int h_size=0){
+		return new XG_Window(w_size,h_size);
 	}
 public:		//INTERFACCIA CONTENITORE
 	virtual const bool Load(XG_Container* =NULL);	

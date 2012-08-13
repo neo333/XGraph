@@ -8,10 +8,11 @@
 #include <XGraph/InputSystem/Mouse.h>
 
 class XG_Container;
+class XG_GuiSystem;
 
 class XG_Component{
 public:		//COSTRUTTORE & DISTRUTTORE
-	XG_Component(void):xgContainer_handler(NULL),moveable(false),agganciato(false){
+	XG_Component(void):xgContainer_handler(NULL),moveable(false),agganciato(false),force_close(false){
 		this->Set_Visibile(true);
 	}
 	~XG_Component(void){
@@ -153,6 +154,7 @@ protected:		//FUNZIONI STATICHE DI SUPPORTO
 	}
 private:		//DATI PRIVATI
 	friend class XG_Container;
+	friend class XG_GuiSystem;
 	bool visible;
 	Point xy_absolute_position_on_screen;		//coordinate di posizione dell'oggetto assolute.
 												//vengono settate dal container
@@ -171,6 +173,7 @@ private:		//DATI PRIVATI
 	bool moveable;
 	bool agganciato;
 	Point agganciato_point;
+	bool force_close;
 };
 
 #endif

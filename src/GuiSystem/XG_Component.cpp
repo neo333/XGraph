@@ -114,12 +114,14 @@ const bool XG_Component::CompositeObjectGraphic(const Texture& source, const Sin
 
 
 const bool XG_Component::Load(XG_Container* handler){
+	this->UnLoad();
 	this->xgContainer_handler=handler;
 	if(this->xgContainer_handler==NULL){
 		this->xgContainer_handler=&XG_Screen::Get_Instance();
 	}
 	this->xgContainer_handler->Add_Controll_toThisContainer(this);
 	this->SetAlpha(this->xgContainer_handler->_alphaMEM);
+	this->force_close=false;
 	return true;
 }
 
@@ -128,6 +130,7 @@ void XG_Component::UnLoad(void){
 		this->xgContainer_handler->Del_Controll_toThisContainer(this);
 		this->xgContainer_handler=NULL;
 	}
+	this->force_close=true;
 }
 
 const bool XG_Component::Object_onTop(void) const{
