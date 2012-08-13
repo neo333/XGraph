@@ -66,7 +66,7 @@ protected:		//INTERFACCIA INTERNA
 																//dell'oggetto!
 														
 	}
-	
+
 protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 	friend class XG_GuiSystem;
 	virtual const bool Check_Focus(const XG_Event_Input& _event){

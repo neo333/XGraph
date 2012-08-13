@@ -3,6 +3,8 @@
 
 const int XG_Window::w_corner =18;
 const int XG_Window::h_corner =20;
+Color XG_Window::ctitle_text_active = Color(0,178,144);
+Color XG_Window::ctitle_text_no_active = Color(0,108,74);
 
 const bool XG_Window::Load(XG_Container* agg){
 	bool status;

@@ -93,7 +93,12 @@ public:			//OPERATORI
 		return Rect(this->_xy_ + oth, this->w, this->h);
 	}
 
-
+	/*Esegue l'operazione di intersezione!*/
+	Rect operator-(const Rect& oth) const{
+		Rect rts;
+		Rect::Rects_Intersect(*this,oth,rts);
+		return rts;
+	}
 
 
 

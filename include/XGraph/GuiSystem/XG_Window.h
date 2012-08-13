@@ -2,11 +2,14 @@
 #define __XG_WINDOW__GUI
 
 #include <XGraph/GuiSystem/XG_Container.h>
-#include <XGraph/GuiSystem/XG_GuiSystem.h>
+#include <XGraph/GuiSystem/XG_FontSys.h>
 
 class XG_Window: public XG_Container{
 public:		//COSTRUTTORE
 	XG_Window(const int w_size=0, const int h_size=0){
+		this->title_text.Set_Color(XG_Window::ctitle_text_no_active);
+		this->title_text.Set_Font(XGRAPH_FONTSYS_1);
+		this->title_text.Set_ModeRender(XGRAP_MODE_RENDER_TEXT_QUALITY);
 		this->SetSize(w_size,h_size);
 	}
 
@@ -48,6 +51,9 @@ public:		//INTERFACCIA CONTENITORE
 		XG_Container::SetAlpha(setter);
 		this->render.Set_Alpha(setter);
 	}
+	void SetTextTitle(const std::string& setter){
+		this->title_text.Set_Text(setter);
+	}
 
 private:	//INTERFACCIA CONTENITORE (PRIVATA)
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
@@ -66,13 +72,30 @@ private:	//INTERFACCIA CONTENITORE (PRIVATA)
 		bool status=true;
 		this->render.Set_Position(this->Get_AbsolutePosition());
 		this->render.SetDrawnableArea(this->Get_DrawnableAreaAbsolute());
+		this->title_text.Set_Position(this->Get_AbsolutePosition() + Point(this->Get_W()/2 - this->title_text.Get_Widht()/2,1));
+		this->title_text.SetDrawnableArea(this->Get_DrawnableAreaAbsolute() - Rect(this->Get_AbsolutePosition(),this->Get_W(),XG_Window::h_corner));
+
 		if(this->render.Drawn()==false){
 			this->AddError_toLOG(this->render.Get_LastError());
 			status=false;
 		}
-		if(XG_Container::Drawn_Component()==false){
-			return false;
+
+		if(this->Is_InFocus()==true){
+			this->title_text.Set_Color(XG_Window::ctitle_text_active);
+		}else{
+			this->title_text.Set_Color(XG_Window::ctitle_text_no_active);
 		}
+
+		if(this->title_text.Drawn()==false){
+			this->AddError_toLOG(this->title_text.Get_LastError());
+			status=false;
+		}
+
+		if(XG_Container::Drawn_Component()==false){
+			this->AddError_toLOG("XG_Contenitore: Impossibile eseguire l'operazione di disengo per i componenti aggregati\n");
+			status=false;
+		}
+		
 		return status;
 	}
 
@@ -83,9 +106,12 @@ private:	//DATA
 	Image render;
 	int w;
 	int h;
+	Text title_text;
 
 	static const int w_corner;
 	static const int h_corner;
+	static Color ctitle_text_active;
+	static Color ctitle_text_no_active;
 };
 
 #endif
