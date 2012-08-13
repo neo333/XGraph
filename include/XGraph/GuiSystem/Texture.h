@@ -253,7 +253,7 @@ private:		//FUNZIONI MEMBRO PRIVATE E DATA
 				this->last_error="Impossibile caricare la risorsa texture richiesta.\n";
 				this->last_error+=IMG_GetError();
 			}else{
-				this->mp_surface=SDL_DisplayFormat(buf_temp);
+				this->mp_surface=SDL_DisplayFormatAlpha(buf_temp);
 				SDL_FreeSurface(buf_temp);
 				buf_temp=NULL;
 				if(this->mp_surface==NULL){
