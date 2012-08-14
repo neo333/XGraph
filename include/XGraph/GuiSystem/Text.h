@@ -74,12 +74,15 @@ public:		//METODI SET&GET
 		return this->h_text;
 	}
 
+	inline const Font* Get_Font(void) const{
+		return this->prtFont;
+	}
 
 
 
 
 public:		//FUNZIONI DI SUPPORTO PUBBLICHE
-	inline static const Rect Get_Size_Pixel_String(const std::string& str, Font& idfont){
+	inline static const Rect Get_Size_Pixel_String(const std::string& str, const Font& idfont){
 		/*Ritorna la larghezza in pixel di una stringa che ha il font indicato.
 			PARAMETRI:
 				> const std::string& (INPUT)		->		La stringa di cui calcolare la larghezza
@@ -92,7 +95,7 @@ public:		//FUNZIONI DI SUPPORTO PUBBLICHE
 		}
 		Rect rts;
 		int w_rts,h_rts;
-		if(TTF_SizeText(idfont,str.c_str(),&w_rts,&h_rts)==0){
+		if(TTF_SizeText(idfont.Get_Font_internal(),str.c_str(),&w_rts,&h_rts)==0){
 			rts.Set_W(w_rts);
 			rts.Set_H(h_rts);
 		}

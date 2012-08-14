@@ -58,7 +58,10 @@ public:			//INTERFACCIA UTENTE
 		XG_Component::UnLoad();
 	}
 
-
+	inline const int Get_NumberOfAggregate(void) const{
+		/*Ritorna il numero di componenti aggregate a questo contenitore*/
+		return this->handled_component.size();
+	}
 protected:		//INTERFACCIA INTERNA
 	inline void Set_ActiveAreaRelative(const Rect& setter){		//l'active area è l'area del contenitore
 		this->active_areaRELATIVE=setter;						//dove possono essere visualizzati i componenti graficia aggregati

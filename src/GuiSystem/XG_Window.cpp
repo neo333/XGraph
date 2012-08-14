@@ -16,6 +16,8 @@ const bool XG_Window::Load(XG_Container* agg){
 void XG_Window::UnLoad(void){
 	XG_Container::UnLoad();
 	this->render.UnLoad();
+	this->w=0;
+	this->h=0;
 }
 
 const bool XG_Window::UpDateRender(void){

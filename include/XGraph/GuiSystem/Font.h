@@ -10,6 +10,8 @@ enum XGRAPH_FONT_STYLE{
 	XGRAPH_FONT_STYLE_BOLD
 };
 
+class Text;
+
 class Font{
 public:		//COSTRUZIONE E DISTRUZIONE OGGETTO
 	Font(void):prtFont(NULL),load_memory_rm(NULL),size_memory_rm(0),size_rm(-1),style_rm(XGRAPH_FONT_STYLE_NORMAL),h_font(0){
@@ -177,7 +179,6 @@ public:		//OPERATORI CAST&OPERAZIONALI
 	}
 
 
-
 private:	//DATA
 	TTF_Font* prtFont;
 	void* load_memory_rm;
@@ -198,6 +199,14 @@ private:	//FUNZIONI DI SUPPORTO INTERNE
 			f2.Load(f1.packname_rm,f1.filename_rm,f1.size_rm,f1.style_rm);
 		}
 	}
+
+private:	//FUNZIONI BASSO LIVELLO
+	friend class Text;
+	
+	TTF_Font* Get_Font_internal(void) const{
+		return this->prtFont;
+	}
+
 };
 
 #endif

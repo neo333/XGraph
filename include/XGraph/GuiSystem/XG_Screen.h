@@ -41,4 +41,6 @@ private:	//SINGLETON DATA
 	XG_Screen& operator=(const XG_Screen&);
 };
 
+#define Desktop XG_Screen::Get_Instance()
+
 #endif

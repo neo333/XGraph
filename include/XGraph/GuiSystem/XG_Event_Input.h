@@ -50,10 +50,10 @@ public:		//DATI INPUT
 	}
 
 	inline const bool Is_Zero(void) const{
-		if(this->_mouseclic.bottone!=NOT) return true;
-		if(this->_mousepress.bottone!=NOT) return true;
-		if(this->_mouserel.bottone!=NOT) return true;
-		return false;
+		if(this->_mouseclic.bottone!=NOT) return false;
+		if(this->_mousepress.bottone!=NOT) return false;
+		if(this->_mouserel.bottone!=NOT) return false;
+		return true;
 	}
 
 	operator const bool(void) const{

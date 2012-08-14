@@ -7,12 +7,14 @@
 #include <XGraph/GuiSystem/XG_GuiSystem.h>
 
 //--CONTENITORI--
+#include <XGraph/GuiSystem/XG_Screen.h>
 #include <XGraph/GuiSystem/XG_Window.h>
 //--------------
 
 //---WIDGETS----
 #include <XGraph/GuiSystem/XG_Button.h>
 #include <XGraph/GuiSystem/XG_Label.h>
+#include <XGraph/GuiSystem/XG_TextBox.h>
 //--------------
 
 #endif
