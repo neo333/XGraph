@@ -30,7 +30,7 @@ void XG_Label::FormatString(void){
 		size_t dim_after=this->lines.size();
 		size_t dim_next=_form.size();
 		this->lines.resize(dim_next,Text(std::string(),this->mycolor));
-		for(size_t i=(dim_next - dim_after); i<dim_next; i++){
+		for(size_t i=dim_after; i<dim_next; i++){
 			this->lines[i].Set_Font(this->myfont);
 			this->lines[i].Set_ModeRender(this->mymode);
 		}

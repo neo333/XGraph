@@ -5,7 +5,7 @@
 
 class XG_Label: public XG_Component{
 public:		//COSTRUTTORE
-	XG_Label(Font& _initFont, const std::string& init_text):XG_Component(),w_limit(0),myfont(_initFont),loaded(false),myalpha(SDL_ALPHA_OPAQUE),lines_num(0),interline(10),w_max_lines(0){
+	XG_Label(Font& _initFont, const std::string& init_text =std::string()):XG_Component(),w_limit(0),myfont(_initFont),loaded(false),myalpha(SDL_ALPHA_OPAQUE),lines_num(0),interline(0),w_max_lines(0),mymode(XGRAP_MODE_RENDER_TEXT_QUALITY){
 		this->Set_Font(_initFont);
 		this->Set_Text(init_text);
 	}
@@ -43,14 +43,15 @@ public:		//METODI SET&GET
 	}
 
 	virtual const bool Load(XG_Container* handle=NULL){
+		XG_Component::Load(handle);
 		this->loaded=true;
 		this->FormatString();
-		return XG_Component::Load(handle);
+		return true;
 	}
 	virtual void UnLoad(void){
+		XG_Component::UnLoad();
 		this->loaded=false;
 		this->FormatString();
-		XG_Component::UnLoad();
 	}
 	virtual const int Get_W(void) const{
 		return this->w_max_lines;

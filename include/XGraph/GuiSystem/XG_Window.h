@@ -6,7 +6,7 @@
 
 class XG_Window: public XG_Container{
 public:		//COSTRUTTORE
-	XG_Window(const int w_size=0, const int h_size=0){
+	XG_Window(const int w_size=0, const int h_size=0):XG_Container(){
 		this->title_text.Set_Color(XG_Window::ctitle_text_no_active);
 		this->title_text.Set_Font(XGRAPH_FONTSYS_1);
 		this->title_text.Set_ModeRender(XGRAP_MODE_RENDER_TEXT_QUALITY);
@@ -57,16 +57,17 @@ public:		//INTERFACCIA CONTENITORE
 
 private:	//INTERFACCIA CONTENITORE (PRIVATA)
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
+		bool status=false;
 		if(XG_Container::Check_Focus(_event)==true){
-			return true;
+			status=true;
 		}	
 		if(_event._mousepress.bottone==XG_Event_Input::LEFT && XG_Component::Mouse_inArea(Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))){
-			return true;
+			status=true;
 		}
 		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true){
-			return true;
+			status=true;
 		}
-		return false;
+		return status;
 	}
 	virtual const bool Drawn_Component(void){
 		bool status=true;

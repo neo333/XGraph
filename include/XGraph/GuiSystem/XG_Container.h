@@ -175,6 +175,7 @@ private:		//GESTIONE AGGREGATI
 		if(_cast!=NULL){
 			this->handled_component.push_back(adder);
 		}else{
+			this->Find_Last_Container(this->last_widget);
 			this->last_widget=this->handled_component.insert(this->last_widget,adder);
 		}
 		return true;
@@ -213,6 +214,7 @@ private:		//GESTIONE AGGREGATI
 	}
 private:		//FUNZIONI DI SUPPORTO INTERNE
 	inline const bool Find_Obj(XG_Component* search, ITERATORE& _out){
+		if(search==NULL) return false;
 		for(_out=this->handled_component.begin(); _out!=this->handled_component.end(); _out++){
 			if((*_out)==search){
 				return true;
@@ -223,8 +225,20 @@ private:		//FUNZIONI DI SUPPORTO INTERNE
 	inline static XG_Container* TryCastIntoContainer_fromComponent(XG_Component* obj){
 		return dynamic_cast<XG_Container*>(obj);
 	}
-	inline const bool PortaInPrimaPosizione(XG_Container* cont){
+	inline const bool Find_Last_Container(ITERATORE& _out){
+		REV_ITERATORE it;
+		it=this->handled_component.rbegin();
+		unsigned int loop=0;
+		for(it=this->handled_component.rbegin(); it!=this->handled_component.rend() && XG_Container::TryCastIntoContainer_fromComponent((*it))!=NULL; it++){
+			loop++;
+		}
 
+		_out=this->handled_component.begin();
+		for(unsigned int i=0; i<this->handled_component.size() - loop; i++){
+			_out++;
+		}
+		if(_out==this->handled_component.begin()) return false;
+		return true;
 	}
 
 private:	//DATI INTERNI

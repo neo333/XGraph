@@ -11,14 +11,17 @@ enum XGRAP_MODE_RENDER_TEXT{
 
 class Text: public Image{
 public:
-	Text(const std::string& init_text =std::string(),const Color& init_color =Color()):Image(),prtFont(NULL),mode_style(XGRAP_MODE_RENDER_TEXT_FAST),mycolor(init_color){
+	Text(const std::string& init_text =std::string(),const Color& init_color =Color()):Image(),prtFont(NULL),mode_style(XGRAP_MODE_RENDER_TEXT_FAST),mycolor(init_color),
+		w_text(0),h_text(0){
 
 	}
-	Text(const Text& oth):Image(oth),prtFont(oth.prtFont),text(oth.text),mode_style(oth.mode_style),mycolor(oth.mycolor){
+	Text(const Text& oth):Image(oth),prtFont(oth.prtFont),text(oth.text),mode_style(oth.mode_style),mycolor(oth.mycolor),w_text(0),h_text(0){
 		this->Redering();
 	}
 	Text& operator=(const Text& oth){
 		Image::operator=(oth);
+		this->w_text=0;
+		this->h_text=0;
 		this->prtFont=oth.prtFont;
 		this->text=oth.text;
 		this->mode_style=oth.mode_style;
@@ -64,20 +67,18 @@ public:		//METODI SET&GET
 		return this->text;
 	}
 
-
+	const Sint16 Get_Widht(void) const{
+		return this->w_text;
+	}
+	const Sint16 Get_Height(void) const{
+		return this->h_text;
+	}
 
 
 
 
 
 public:		//FUNZIONI DI SUPPORTO PUBBLICHE
-	inline static const int AltezzaFont(const Font& _font){
-		/*Ritorna l'altezza in pixel di un font.
-			Interpretabile come l'altezza massima di tutti i possibili caratteri del font*/
-		return TTF_FontHeight(_font);
-	}
-
-
 	inline static const Rect Get_Size_Pixel_String(const std::string& str, Font& idfont){
 		/*Ritorna la larghezza in pixel di una stringa che ha il font indicato.
 			PARAMETRI:
@@ -106,6 +107,8 @@ private:	//DATA
 	std::string text;
 	XGRAP_MODE_RENDER_TEXT mode_style;
 	Color mycolor;
+	Sint16 w_text;
+	Sint16 h_text;
 
 private:	//FUNZIONI DI SUPPORTO
 	const bool Redering(void){
@@ -130,9 +133,13 @@ private:	//FUNZIONI DI SUPPORTO
 			}else{
 				this->SetCutArea(Rect(Point(0,0),w,h));
 			}
+			this->w_text=w;
+			this->h_text=h;
 			this->Set_Alpha(this->_alpha);
 		}else{
 			_intSurface.Delete();
+			this->w_text=0;
+			this->h_text=0;
 		}
 		return true;
 	}
