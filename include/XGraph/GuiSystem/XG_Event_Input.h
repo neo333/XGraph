@@ -48,6 +48,18 @@ public:		//DATI INPUT
 		this->_mousepress.bottone=NOT;
 		this->_mouserel.bottone=NOT;
 	}
+
+	inline const bool Is_Zero(void) const{
+		if(this->_mouseclic.bottone!=NOT) return true;
+		if(this->_mousepress.bottone!=NOT) return true;
+		if(this->_mouserel.bottone!=NOT) return true;
+		return false;
+	}
+
+	operator const bool(void) const{
+		if(this->Is_Zero()==true) return false;
+		return true;
+	}
 };
 
 #endif

@@ -15,7 +15,7 @@ public:		//COSTRUTTORE & DISTRUTTORE
 	XG_Component(void):xgContainer_handler(NULL),moveable(false),agganciato(false),force_close(false){
 		this->Set_Visibile(true);
 	}
-	~XG_Component(void){
+	virtual ~XG_Component(void){
 		if(this->Is_Load()==true){
 			this->UnLoad();
 		}

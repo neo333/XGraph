@@ -2,7 +2,7 @@
 #include <XGraph/GuiSystem/XG_GuiSystem.h>
 
 XG_Screen* XG_Screen::mpInstance =NULL;
-XG_Screen::XG_Screen(void){
+XG_Screen::XG_Screen(void):XG_Container(){
 	this->is_root=true;
 }
 XG_Screen::XG_Screen(const XG_Screen& oth){

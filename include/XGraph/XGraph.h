@@ -12,6 +12,7 @@
 
 //---WIDGETS----
 #include <XGraph/GuiSystem/XG_Button.h>
+#include <XGraph/GuiSystem/XG_Label.h>
 //--------------
 
 #endif

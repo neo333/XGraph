@@ -12,7 +12,7 @@ enum XGRAPH_FONT_STYLE{
 
 class Font{
 public:		//COSTRUZIONE E DISTRUZIONE OGGETTO
-	Font(void):prtFont(NULL),load_memory_rm(NULL),size_memory_rm(0),size_rm(-1),style_rm(XGRAPH_FONT_STYLE_NORMAL){
+	Font(void):prtFont(NULL),load_memory_rm(NULL),size_memory_rm(0),size_rm(-1),style_rm(XGRAPH_FONT_STYLE_NORMAL),h_font(0){
 
 	}
 	
@@ -21,10 +21,11 @@ public:		//COSTRUZIONE E DISTRUZIONE OGGETTO
 	Questo perché per eseguire la copia del font specificato il sistema proverà il ricaricamento
 	con i parametri dell'operando dalla quale eseguire la copia. Tale risorsa, quindi, potrebbe
 	non essere più disponibile. Tenere a mente questa cosa!*/
-	Font(const Font& oth):prtFont(NULL),load_memory_rm(NULL),size_memory_rm(0),size_rm(oth.size_rm),style_rm(oth.style_rm){
+	Font(const Font& oth):prtFont(NULL),load_memory_rm(NULL),size_memory_rm(0),size_rm(oth.size_rm),style_rm(oth.style_rm),h_font(0){
 		Font::Copy_Font(oth,*this);
 	}
 	Font& operator=(const Font& oth){
+		this->h_font=0;
 		Font::Copy_Font(oth,*this);
 		return *this;
 	}
@@ -72,6 +73,7 @@ public:		//CARICAMENTO FONT
 		this->filename_rm=filename;
 		this->load_memory_rm=NULL;
 		this->size_memory_rm=0;
+		this->h_font=TTF_FontHeight(this->prtFont);
 		this->Set_FontStyle(style);
 		return true;
 
@@ -113,6 +115,7 @@ public:		//CARICAMENTO FONT
 		this->packname_rm.clear();
 		this->load_memory_rm=memory;
 		this->size_memory_rm=size_memory;
+		this->h_font=TTF_FontHeight(this->prtFont);
 		this->Set_FontStyle(style);
 		return true;
 	}
@@ -150,7 +153,9 @@ public:		//METODI SET&GET
 		return true;
 	}
 
-
+	inline const int Get_H_Font(void) const{
+		return this->h_font;
+	}
 
 
 
@@ -182,6 +187,7 @@ private:	//DATA
 	int size_rm;
 	XGRAPH_FONT_STYLE style_rm;
 	std::string _logError;
+	int h_font;
 
 private:	//FUNZIONI DI SUPPORTO INTERNE
 	inline static void Copy_Font(const Font& f1, Font& f2){
