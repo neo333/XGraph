@@ -118,15 +118,13 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 		}
 
 		/*Porto il contenitore richiedente di focus in prima posizione nel vettore*/
+		XG_Component* _afterBack = this->handled_component.back();
 		if(next_focus!=NULL){
-			if(next_focus!=this->handled_component.back()){
+			if(next_focus!=_afterBack){
 				ITERATORE it;
 				if(this->Find_Obj(next_focus,it)==true){
-					XG_Component* _temp=this->handled_component.back();
-					XG_Container* _cast=XG_Container::TryCastIntoContainer_fromComponent(_temp);
-					assert(_cast);	//in polposition non dovrebbe essereci un object se next_focus è diverso da null
-					this->handled_component.back()=next_focus;
-					(*it)=_temp;
+					this->handled_component.erase(it);
+					this->handled_component.push_back(next_focus);
 				}
 			}
 		}
