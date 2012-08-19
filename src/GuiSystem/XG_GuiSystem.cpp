@@ -1,5 +1,6 @@
 #include <XGraph/GuiSystem/XG_GuiSystem.h>
 #include <XGraph/InputSystem/Mouse.h>
+#include <XGraph/InputSystem/Tastiera.h>
 #include <XGraph/GuiSystem/XG_Screen.h>
 
 XG_GuiSystem* XG_GuiSystem::mpInstance =NULL;
@@ -27,8 +28,6 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 		}else{
 			this->last_input._mouserel.bottone=XG_Event_Input::LEFT;
 			this->last_input._mouseclic.bottone=XG_Event_Input::LEFT;
-			/*this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_X());
-			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_Y());*/
 			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_LastClic().x_clic);
 			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_LastClic().y_clic);
 		}
@@ -44,8 +43,8 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 		}else{
 			this->last_input._mouserel.bottone=XG_Event_Input::RIGHT;
 			this->last_input._mouseclic.bottone=XG_Event_Input::RIGHT;
-			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_X());
-			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_Y());
+			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_LastClic().x_clic);
+			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_LastClic().y_clic);
 		}
 		this->m_right_but=button_check;
 		status=true;
@@ -59,13 +58,19 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 		}else{
 			this->last_input._mouserel.bottone=XG_Event_Input::MIDDLE;
 			this->last_input._mouseclic.bottone=XG_Event_Input::MIDDLE;
-			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_X());
-			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_Y());
+			this->last_input._mouseclic.xy.Set_X(ctrlMouse.Get_LastClic().x_clic);
+			this->last_input._mouseclic.xy.Set_Y(ctrlMouse.Get_LastClic().y_clic);
 		}
 		this->m_middle_but=button_check;
 		status=true;
 	}
 
+	//UPDATE KEY
+	Uint16 __key;
+	if(Tastiera::Get_Instance().Get_charBuffer(__key)==true){
+		this->last_input._key_press_instant.press=true;
+		this->last_input._key_press_instant.unicode_key=__key;
+	}
 
 	return status;
 }
