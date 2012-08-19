@@ -4,6 +4,7 @@
 #include <XGraph/GuiSystem/XG_Component.h>
 #include <XGraph/GuiSystem/XG_FontSys.h>
 #include <SDL/SDL_gfxPrimitives.h>
+#include <XGraph/InputSystem/Tastiera.h>
 
 class XG_TextBox: public XG_Component{
 public:		//COSTRUTTORE
@@ -74,7 +75,7 @@ protected:	//CONTROLLO & DISEGNO
 			this->active=true;
 			return true;
 		}else{
-			if(_event==true){
+			if(_event==true && _event._key_press_instant.press==false){
 				this->active=false;
 			}
 		}
@@ -84,6 +85,37 @@ protected:	//CONTROLLO & DISEGNO
 		return false;
 	}
 	virtual void Exeque_Controll(const XG_Event_Input& _event){
+		if(_event._key_press_instant.press==true){
+			Uint16 unicode_char=_event._key_press_instant.unicode_key;
+			if(unicode_char==0){
+				const Uint8* key_state=Tastiera::Get_Instance().Get_snapState_Key();
+				if(key_state[SDLK_LEFT]){
+					if(this->pos_cursore>0){
+						this->pos_cursore--;
+					}
+				}else{
+					if(key_state[SDLK_RIGHT]){
+						if(this->pos_cursore<this->data.Get_Text().size()){
+							this->pos_cursore++;
+						}
+					}
+				}
+			}else{
+				std::string new_text=this->data.Get_Text();
+				if((unicode_char >= 0x20 && unicode_char <= 0x7E) || (unicode_char >= 0xC0 && unicode_char <= 0xFF)){
+					if(this->data.Get_Widht() + Text::Get_Size_Pixel_String("OK",*this->data.Get_Font()).Get_W() < this->Get_W()){
+						new_text.insert(new_text.begin() + this->pos_cursore,(unsigned char)(unicode_char));
+						this->pos_cursore+=1;
+					}
+				}else{
+					if(unicode_char==0x08 && new_text.size()>0 && this->pos_cursore>0){
+						new_text.erase(new_text.begin() + this->pos_cursore -1);
+						this->pos_cursore-=1;
+					}
+				}
+				this->Set_Text(new_text);
+			}
+		}
 	}
 	virtual const bool Drawn_Component(void){
 		this->render_back.Set_Position(this->Get_AbsolutePosition());
