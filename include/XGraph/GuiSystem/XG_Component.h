@@ -46,6 +46,9 @@ public:		//INTERFACCIA	UTENTE
 	inline const std::string& Get_LogError(void) const{
 		return this->_logError;
 	}
+	inline const XG_Container* Get_Container(void) const{
+		return this->xgContainer_handler;
+	}
 
 	/*Ritorna 'true' se l'oggetto si trova in un CONTAINER (contenitore) che è in focus,
 	o 'top'*/

@@ -15,6 +15,7 @@
 #include <XGraph/GuiSystem/XG_Button.h>
 #include <XGraph/GuiSystem/XG_Label.h>
 #include <XGraph/GuiSystem/XG_TextBox.h>
+#include <XGraph/GuiSystem/XG_Picture.h>
 //--------------
 
 #endif
