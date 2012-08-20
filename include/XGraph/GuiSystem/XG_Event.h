@@ -27,6 +27,6 @@ private:	//DATA
 	DATA* param;
 };
 
-#define NEWEVENT(FUNZ,CALLER,OPERAND) XG_Event<XG_Component>(FUNZ,CALLER,OPERAND)
+
 
 #endif

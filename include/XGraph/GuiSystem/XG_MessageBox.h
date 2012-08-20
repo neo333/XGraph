@@ -45,33 +45,33 @@ public:
 			this->ok.SetText("OK");
 			this->ok.SetSize(120,20);
 			this->ok.Set_Position_Relative(Point(this->Get_W()/2 - this->ok.Get_W()/2,this->Get_H() - this->ok.Get_H() - 10));
-			this->ok.OnClic_AddControll(NEWEVENT(XG_MessageBox::CloseThisWin,&this->ok,this));
+			this->ok.OnClic_AddControll(XG_Event<XG_Component>(XG_MessageBox::CloseThisWin,&this->ok,this));
 			break;
 		case XGRAPH_MESSAGEBOX_TYPE_YES_NO:
 			this->ok.Load(this);
 			this->ok.SetText("SI");
 			this->ok.SetSize(120,20);
 			this->ok.Set_Position_Relative(Point(this->Get_W()/2 - this->ok.Get_W()/2 - this->ok.Get_W(),this->Get_H() - this->ok.Get_H() - 10));
-			this->ok.OnClic_AddControll(NEWEVENT(XG_MessageBox::CloseThisWin_withYES,&this->ok,this));
+			this->ok.OnClic_AddControll(XG_Event<XG_Component>(XG_MessageBox::CloseThisWin_withYES,&this->ok,this));
 
 			this->cancel.Load(this);
 			this->cancel.SetText("NO");
 			this->cancel.SetSize(120,20);
 			this->cancel.Set_Position_Relative(Point(this->Get_W()/2 - this->cancel.Get_W()/2 + this->cancel.Get_W(),this->Get_H() - this->cancel.Get_H() - 10));
-			this->cancel.OnClic_AddControll(NEWEVENT(XG_MessageBox::CloseThisWin_withNO,&this->cancel,this));
+			this->cancel.OnClic_AddControll(XG_Event<XG_Component>(XG_MessageBox::CloseThisWin_withNO,&this->cancel,this));
 			break;
 		case XGRAPH_MESSAGEBOX_TYPE_OK_UNDO:
 			this->ok.Load(this);
 			this->ok.SetText("OK");
 			this->ok.SetSize(120,20);
 			this->ok.Set_Position_Relative(Point(this->Get_W()/2 - this->ok.Get_W()/2 - this->ok.Get_W(),this->Get_H() - this->ok.Get_H() - 10));
-			this->ok.OnClic_AddControll(NEWEVENT(XG_MessageBox::CloseThisWin_withYES,&this->ok,this));
+			this->ok.OnClic_AddControll(XG_Event<XG_Component>(XG_MessageBox::CloseThisWin_withYES,&this->ok,this));
 
 			this->cancel.Load(this);
 			this->cancel.SetText("ANNULLA");
 			this->cancel.SetSize(120,20);
 			this->cancel.Set_Position_Relative(Point(this->Get_W()/2 - this->cancel.Get_W()/2 + this->cancel.Get_W(),this->Get_H() - this->cancel.Get_H() - 10));
-			this->cancel.OnClic_AddControll(NEWEVENT(XG_MessageBox::CloseThisWin_withNO,&this->cancel,this));
+			this->cancel.OnClic_AddControll(XG_Event<XG_Component>(XG_MessageBox::CloseThisWin_withNO,&this->cancel,this));
 			break;
 		}
 	}
@@ -107,10 +107,5 @@ private:	//FUNZIONI
 		}
 	}
 };
-
-#define New_MessageBox(TITLE,MESSAGE) \
-			NewComponent(new XG_MessageBox(TITLE,MESSAGE,XGRAPH_MESSAGEBOX_TYPE_NORMAL,NULL));
-#define New_MessageBox_plus(TITLE,MESSAGE,TYPE,RESULT_POINTER) \
-			NewComponent(new XG_MessageBox(TITLE,MESSAGE,TYPE,RESULT_POINTER));
 
 #endif

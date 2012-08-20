@@ -66,8 +66,12 @@ public:		//SKIN SETTING
 	/*Setta la skin per il cursore. Inserire un parametro texture non caricato per ripristinare
 	la skin di sistema*/
 	void SetNormalSkin(const Texture&);
+	void SetLoadSkin(const Texture&);
 
-
+	void ModeLoad_skinMouse(const bool set){
+		/*Setta se il mouse si trova in modalità CARICAMENTO o meno*/
+		this->mode_load=set;
+	}
 
 
 
@@ -96,6 +100,9 @@ private:		//PRIVATE DATA
 	friend class XG_GuiSystem;
 	Image skin_normal;
 	bool skin_normal_loaded;
+	Image skin_load;
+	bool skin_load_loaded;
+	bool mode_load;
 	//------------------
 
 private:	//SINGLETON REALIZATION

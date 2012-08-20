@@ -93,8 +93,12 @@ const bool XG_GuiSystem::Run(void){
 		return false;
 	}
 
-	if(Mouse::Get_Instance().skin_normal_loaded==true){
+	if(Mouse::Get_Instance().skin_normal_loaded==true && (Mouse::Get_Instance().mode_load==false || Mouse::Get_Instance().skin_load_loaded==false)){
 		Mouse::Get_Instance().skin_normal.Drawn();
+	}else{
+		if(Mouse::Get_Instance().mode_load==true && Mouse::Get_Instance().skin_load_loaded==true){
+			Mouse::Get_Instance().skin_load.Drawn();
+		}
 	}
 
 	return true;
