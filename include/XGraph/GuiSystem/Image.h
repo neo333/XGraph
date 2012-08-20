@@ -86,9 +86,9 @@ public:		//METODI SET/GET
 	}
 
 	/*Setta la trasparenza. 255=OPACO, 0=TRASPARENTE*/
-	const bool Set_Alpha(const Uint8& setter){
+	const bool Set_Alpha(const Uint8 setter){
 		if(this->_intSurface.Is_Load() && this->_alpha!=setter){
-			if(SDL_SetAlpha(this->_intSurface, SDL_SRCALPHA, setter)!=0){
+			if(SDL_SetAlpha(this->_intSurface, SDL_SRCALPHA | SDL_RLEACCEL, setter)!=0){
 				this->last_error="Impossibile eseguire la funzione di trasparenza per l'immagine!\n";
 				this->last_error+=SDL_GetError();
 				return false;
@@ -97,6 +97,9 @@ public:		//METODI SET/GET
 			}
 		}
 		return true;
+	}
+	const Uint8 Get_Alpha(void) const{
+		return this->_alpha;
 	}
 
 	/*Ridimensiona un'immagine. L'area di CUT (taglio) verrà resettata!*/

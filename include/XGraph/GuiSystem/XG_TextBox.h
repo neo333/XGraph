@@ -10,7 +10,10 @@ class XG_TextBox: public XG_Component{
 public:		//COSTRUTTORE
 	XG_TextBox(const std::string& init_str =std::string()):XG_Component(),data(std::string(),Color(0,0,0)),active(false),
 		pos_cursore(0),time_mem_delay_cursore(0),vis_cursore(false){
-		data.Set_Font(XGRAPH_FONTSYS_1);
+		data.Set_Font(XGRAPH_FONTSYS_2);
+		this->info_text.Set_Font(XGRAPH_FONTSYS_2);
+		this->info_text.Set_Color(Color(100,100,100));
+		this->info_text.Set_ModeRender(XGRAP_MODE_RENDER_TEXT_QUALITY);
 		this->Set_Size(0,0);
 		this->Set_Text(init_str);
 		this->data.Set_ModeRender(XGRAP_MODE_RENDER_TEXT_QUALITY);
@@ -60,8 +63,12 @@ public:		//METODI SET&GET
 	void Set_Text(const std::string& setter){
 		this->data.Set_Text(setter);
 	}
-
-
+	void Set_ModeCryp(const bool setter){
+		this->data.Set_CrypMode(setter);
+	}
+	void Set_InfoText(const std::string& setter){
+		this->info_text.Set_Text(setter);
+	}
 
 
 
@@ -122,10 +129,19 @@ protected:	//CONTROLLO & DISEGNO
 		this->render_back.SetDrawnableArea(this->Get_DrawnableAreaAbsolute());
 		this->data.Set_Position(this->Get_AbsolutePosition() + Point(5,this->h/2 - this->data.Get_Height()/2));
 		this->data.SetDrawnableArea(this->Get_DrawnableAreaAbsolute() - Rect(this->Get_AbsolutePosition(),this->w,this->h));
+		this->info_text.Set_Position(this->Get_AbsolutePosition() + Point(5,this->h/2 - this->info_text.Get_Height()/2));
+		this->info_text.SetDrawnableArea(this->Get_DrawnableAreaAbsolute() - Rect(this->Get_AbsolutePosition(),this->w,this->h));
 
 		if(this->render_back.Drawn()==false){
 			this->AddError_toLOG(this->render_back.Get_LastError());
 			return false;
+		}
+
+		if(this->data.Get_Text().size()==0){
+			if(this->info_text.Drawn()==false){
+				this->AddError_toLOG(this->info_text.Get_LastError());
+				return false;
+			}
 		}
 
 		if(this->data.Drawn()==false){
@@ -142,7 +158,7 @@ protected:	//CONTROLLO & DISEGNO
 			}
 
 			if(this->vis_cursore==true){
-				this->cursore.Set_Position(this->Get_AbsolutePosition() + Point(5 + Text::Get_Size_Pixel_String(this->data.Get_Text().substr(0,this->pos_cursore),*this->data.Get_Font()).Get_W(), this->h/2 - this->cursore.Get_Height()/2));
+				this->cursore.Set_Position(this->Get_AbsolutePosition() + Point(5 + Text::Get_Size_Pixel_String(this->data.Get_Text().substr(0,this->pos_cursore),*this->data.Get_Font(),this->data.Get_CrypMode()).Get_W(), this->h/2 - this->cursore.Get_Height()/2));
 				this->cursore.SetDrawnableArea(this->Get_DrawnableAreaAbsolute() - Rect(this->Get_AbsolutePosition(),this->w,this->h));
 
 				if(this->cursore.Drawn()==false){
@@ -181,6 +197,7 @@ private:	//DATA
 	unsigned int pos_cursore;
 	Uint32 time_mem_delay_cursore;
 	bool vis_cursore;
+	Text info_text;
 
 private:	//DATA STATIC
 	static const Sint16 w_corner;

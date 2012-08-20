@@ -106,7 +106,8 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 			/**/
 
 			/*Verifico se qualche componente necessita del focus*/
-			if(this->sothing_request_focus==false && _current->Check_Focus(_event)==true && _current->visible==true){
+			bool _current_request_focus=_current->Check_Focus(_event);
+			if(this->sothing_request_focus==false && _current_request_focus==true && _current->visible==true){
 				this->sothing_request_focus=true;
 				this->who_request_focus=_current;
 				next_focus=_tryCast;

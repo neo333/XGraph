@@ -5,7 +5,7 @@
 
 class XG_Picture: public XG_Component{
 public:		//COSTRUZIONE
-	XG_Picture(void):XG_Component(),load_parent_call(false){
+	XG_Picture(void):XG_Component(),load_parent_call(false),in_anim(false){
 
 	}
 
@@ -59,10 +59,16 @@ public:		//METODI GET&SET
 	}
 
 
+public:		//ANIMAZIONI
+	void Start_Alpha_Animation(const Uint8, const Uint32);
+	void Stop_Alpha_Animation(void);
+	const bool Is_Alpha_Animation_Progress(void) const;
+
 
 
 protected:	//CONTROLLO&DISEGNO
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
+		this->UpDateAnimationTotal();
 		return XG_Component::Check_Focus(_event);
 	}
 	virtual void Exeque_Controll(const XG_Event_Input& _event){
@@ -83,11 +89,22 @@ private:	//DATA
 	Image data;
 	bool load_parent_call;
 
+	int alpha_anim_diff;			//<<----animazione alpha
+	Uint32 delay_alpha_anim;
+	Uint32 time_mem_alpha_anim;
+	bool in_anim;
+	Uint8 alpha_anim_start;
+									//<<--------------------
 
 private:	//METODI INTERNI DI SUPPORTO
 	inline void UpDateMetricImage(void){
 		this->Set_AreaGrappableRelative(Rect(Point(0,0),this->Get_W(),this->Get_H()));
 	}
+
+	inline void UpDateAnimationTotal(void){
+		this->UpDate_Animation_Alpha();
+	}
+	void UpDate_Animation_Alpha(void);
 };
 
 #endif

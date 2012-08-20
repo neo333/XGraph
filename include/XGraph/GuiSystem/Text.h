@@ -12,10 +12,10 @@ enum XGRAP_MODE_RENDER_TEXT{
 class Text: public Image{
 public:
 	Text(const std::string& init_text =std::string(),const Color& init_color =Color()):Image(),prtFont(NULL),mode_style(XGRAP_MODE_RENDER_TEXT_FAST),mycolor(init_color),
-		w_text(0),h_text(0){
+		w_text(0),h_text(0),cryp_mode(false){
 
 	}
-	Text(const Text& oth):Image(oth),prtFont(oth.prtFont),text(oth.text),mode_style(oth.mode_style),mycolor(oth.mycolor),w_text(0),h_text(0){
+	Text(const Text& oth):Image(oth),prtFont(oth.prtFont),text(oth.text),mode_style(oth.mode_style),mycolor(oth.mycolor),w_text(0),h_text(0),cryp_mode(oth.cryp_mode){
 		this->Redering();
 	}
 	Text& operator=(const Text& oth){
@@ -26,6 +26,7 @@ public:
 		this->text=oth.text;
 		this->mode_style=oth.mode_style;
 		this->mycolor=oth.mycolor;
+		this->cryp_mode=oth.cryp_mode;
 		this->Redering();
 		return *this;
 	}
@@ -62,6 +63,15 @@ public:		//METODI SET&GET
 			this->Redering();
 		}
 	}
+	void Set_CrypMode(const bool setter){
+		if(this->cryp_mode!=setter){
+			this->cryp_mode=setter;
+			this->Redering();
+		}
+	}
+	const bool Get_CrypMode(void) const{
+		return this->cryp_mode;
+	}
 
 	inline const std::string& Get_Text(void) const{
 		return this->text;
@@ -82,26 +92,45 @@ public:		//METODI SET&GET
 
 
 public:		//FUNZIONI DI SUPPORTO PUBBLICHE
-	inline static const Rect Get_Size_Pixel_String(const std::string& str, const Font& idfont){
+	inline static const Rect Get_Size_Pixel_String(const std::string& str, const Font& idfont, const bool cry_mode =false){
 		/*Ritorna la larghezza in pixel di una stringa che ha il font indicato.
 			PARAMETRI:
 				> const std::string& (INPUT)		->		La stringa di cui calcolare la larghezza
 				> const ID_FONT&	 (INPUT)		->		L'Id font col quale verificare la stringa
+				> const bool cry_mode(INPUT)		->		Indicare 'true' se si vuole la lunghezza della stringa in modalità
+															 crittata ('*')
 			RITORNO:
 				Ritorna la larghezza e l'altezza in pixel della stringa.
 		I valori sono espressi rispettivamente nella larghezza e nell'altezza del rettangolo ritornato*/
 		if(str.size()==0){
-			return Rect(Point(),0,0);
+			return Rect(Point(0,0),0,0);
 		}
 		Rect rts;
 		int w_rts,h_rts;
-		if(TTF_SizeText(idfont.Get_Font_internal(),str.c_str(),&w_rts,&h_rts)==0){
+		char* str_buffer=new char[str.size()+1];
+		if(cry_mode==false){
+			Text::StrCopy(str_buffer,str.c_str(),str.size()+1);
+		}else{
+			std::string str_temp(str);
+			str_temp.replace(str_temp.begin(),str_temp.end(),str_temp.size(),'*');
+			Text::StrCopy(str_buffer,str_temp.c_str(),str.size()+1);
+		}
+		if(TTF_SizeText(idfont.Get_Font_internal(),str_buffer,&w_rts,&h_rts)==0){
 			rts.Set_W(w_rts);
 			rts.Set_H(h_rts);
 		}
+		delete[] str_buffer;
+		str_buffer=NULL;
 		return rts;
 	}
-
+	
+	inline static void StrCopy(char* str_dest, const char* str_source, const size_t size_buffer_dest){
+#ifdef MVISUAL_STUDIO_COMPILER
+		strcpy_s(str_dest,size_buffer_dest,str_source);
+#else
+		strcpy(str_dest,str_source);
+#endif
+	}
 
 
 
@@ -112,33 +141,45 @@ private:	//DATA
 	Color mycolor;
 	Sint16 w_text;
 	Sint16 h_text;
+	bool cryp_mode;
 
 private:	//FUNZIONI DI SUPPORTO
 	const bool Redering(void){
 		if(this->prtFont && this->text.size()>0){
+			char* text_render=new char[this->text.size()+1];
+			if(this->cryp_mode==false){
+				Text::StrCopy(text_render,this->text.c_str(),this->text.size()+1);
+			}else{
+				std::string str_temp(this->text);
+				str_temp.replace(str_temp.begin(),str_temp.end(),str_temp.size(),'*');
+				Text::StrCopy(text_render,str_temp.c_str(),this->text.size()+1);
+			}
 			switch(this->mode_style){
 			case XGRAP_MODE_RENDER_TEXT_FAST:
-				this->_intSurface=TTF_RenderText_Solid(*this->prtFont, this->text.c_str(), this->mycolor);
+				this->_intSurface=TTF_RenderText_Solid(*this->prtFont, text_render, this->mycolor);
 				break;
 			case XGRAP_MODE_RENDER_TEXT_QUALITY:
-				this->_intSurface=TTF_RenderText_Blended(*this->prtFont, this->text.c_str(), this->mycolor);
+				this->_intSurface=TTF_RenderText_Blended(*this->prtFont, text_render, this->mycolor);
 				break;
 			default:
 				this->last_error+="Text: Impossibile effettuare il redering del testo con la modalità richiesta!\n";
 				return false;
 			}
 			int w,h;
-			if(TTF_SizeText(*this->prtFont,this->text.c_str(),&w,&h)!=0){
+			if(TTF_SizeText(*this->prtFont,text_render,&w,&h)!=0){
 				this->last_error+="Text: Impossibile eseguire il Redering del Testo\n";
 				this->last_error+=TTF_GetError();
 				this->last_error+='\n';
+				delete[] text_render;
+				text_render=NULL;
 				return false;
-			}else{
-				this->SetCutArea(Rect(Point(0,0),w,h));
 			}
+			this->SetCutArea(Rect(Point(0,0),w,h));
 			this->w_text=w;
 			this->h_text=h;
 			this->Set_Alpha(this->_alpha);
+			delete[] text_render;
+			text_render=NULL;
 		}else{
 			_intSurface.Delete();
 			this->w_text=0;

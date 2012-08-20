@@ -9,7 +9,9 @@ public:		//ACCESSO AI FONT DI SISTEMA
 	inline Font& Get_fontSYS_1(void){
 		return this->sysFont1;
 	}
-
+	inline Font& Get_fontSYS_2(void){
+		return this->sysFont2;
+	}
 
 
 
@@ -17,6 +19,7 @@ public:		//ACCESSO AI FONT DI SISTEMA
 
 private:	//DATA FONT SYSTEMA
 	Font sysFont1;
+	Font sysFont2;
 
 
 public:		//ACCESSO SINGLETON
@@ -35,5 +38,6 @@ private:	//REALIZE SINGLETON
 };
 
 #define XGRAPH_FONTSYS_1 XG_FontSys::Get_Instance().Get_fontSYS_1()
+#define XGRAPH_FONTSYS_2 XG_FontSys::Get_Instance().Get_fontSYS_2()
 
 #endif
