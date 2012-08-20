@@ -92,6 +92,11 @@ const bool XG_GuiSystem::Run(void){
 		this->_last_error=_screenpnt->Get_LogError();
 		return false;
 	}
+
+	if(Mouse::Get_Instance().skin_normal_loaded==true){
+		Mouse::Get_Instance().skin_normal.Drawn();
+	}
+
 	return true;
 }
 

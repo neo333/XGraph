@@ -83,9 +83,12 @@ private:		//INTERNAL DATA
 
 private:		//INTERNAL FUNCTIONS
 
-	void UpDateMousePosition(void){
+	inline void UpDateMousePosition(void){
 		Mouse::Get_Instance().x=this->_int_events.motion.x;
 		Mouse::Get_Instance().y=this->_int_events.motion.y;
+		if(Mouse::Get_Instance().skin_normal_loaded==true){
+			Mouse::Get_Instance().skin_normal.Set_Position(Point(this->_int_events.motion.x,this->_int_events.motion.y));
+		}
 	}
 	void UpDateMouseDownButt(void){
 		switch(this->_int_events.button.button){

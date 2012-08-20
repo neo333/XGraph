@@ -4,8 +4,10 @@
 #include <SDL/SDL.h>
 #include <cassert>
 #include <vector>
+#include <XGraph/GuiSystem/Image.h>
 
 class Gestore_Input;
+class XG_GuiSystem;
 
 enum TYPE_MOUSE_BUTTON{
 	TMB_NULL,
@@ -60,6 +62,21 @@ public:		//GET REAL-TIME STATE MOUSE
 
 
 
+public:		//SKIN SETTING
+	/*Setta la skin per il cursore. Inserire un parametro texture non caricato per ripristinare
+	la skin di sistema*/
+	void SetNormalSkin(const Texture&);
+
+
+
+
+
+
+
+
+
+
+
 
 
 	
@@ -74,6 +91,12 @@ private:		//PRIVATE DATA
 	bool _bmiddle;
 	Clic_inPoint last_clic;
 	Clic_inPoint last_release;
+
+	//---<<<skin>>>>----
+	friend class XG_GuiSystem;
+	Image skin_normal;
+	bool skin_normal_loaded;
+	//------------------
 
 private:	//SINGLETON REALIZATION
 	friend class Gestore_Input;
