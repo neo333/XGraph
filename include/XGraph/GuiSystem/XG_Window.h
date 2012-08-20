@@ -55,7 +55,7 @@ public:		//INTERFACCIA CONTENITORE
 		this->title_text.Set_Text(setter);
 	}
 
-private:	//INTERFACCIA CONTENITORE (PRIVATA)
+protected:	//INTERFACCIA CONTENITORE (PRIVATA)
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
 		bool status=false;
 		if(XG_Container::Check_Focus(_event)==true){

@@ -23,6 +23,31 @@ public:		//INTERFACCIA CLIENT
 			this->dynamic_component.insert(std::pair<XG_Component*,info_Component_add>(obj,info_Component_add(namefile,linefile)));
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 private:	//FUNZIONI GESTIONE INTERNE
 	const bool UpDateAllInput(void);
 	void CheckDynamicComponent(void);
@@ -59,9 +84,11 @@ private:	//SINGLETON REALIZZAZIONE
 	XG_GuiSystem(void);
 	XG_GuiSystem(const XG_GuiSystem&);
 	XG_GuiSystem& operator=(const XG_GuiSystem&);
+	
 };
 
 #define GuiSystem XG_GuiSystem::Get_Instance()
 #define NewComponent(X) XG_GuiSystem::Get_Instance().RegistraComponenteDinamico(X,__FILE__,__LINE__)
+
 
 #endif

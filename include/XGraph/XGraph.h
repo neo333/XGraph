@@ -18,4 +18,13 @@
 #include <XGraph/GuiSystem/XG_Picture.h>
 //--------------
 
+//---ELEMENTI_PREFABRICATI---
+#include <XGraph/GuiSystem/XG_MessageBox.h>
+//---------------------------
+
+#define XGRAPH_MAIN_LOOP_run()	\
+			SysInput.UpDateAll();		\
+			GuiSystem.Run();			\
+			Screen.UpDateScreen();	
+
 #endif
