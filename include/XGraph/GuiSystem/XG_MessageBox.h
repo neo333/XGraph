@@ -22,6 +22,7 @@ public:
 	XG_MessageBox(const std::string& init_title, const std::string& init_mess, const XGRAPH_MESSAGEBOX_TYPE init_type, XGRAPH_MESSAGEBOX_RESULT* const init_result):
 		XG_Window(), type(init_type), mess_data(XGRAPH_FONTSYS_1), point_result(init_result){
 		
+		XG_Container::SetModal(true);
 		XG_Window::Load();
 		XG_Window::SetSize(480,180);
 		XG_Window::SetTextTitle(init_title);

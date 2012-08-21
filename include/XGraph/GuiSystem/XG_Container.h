@@ -8,7 +8,7 @@ class XG_GuiSystem;
 
 class XG_Container: public XG_Component{
 public:			//COSTRUTTORE
-	XG_Container(void):XG_Component(),is_root(false),_alphaMEM(SDL_ALPHA_OPAQUE),inFocus(false),sothing_request_focus(false),who_request_focus(NULL){
+	XG_Container(void):XG_Component(),is_root(false),_alphaMEM(SDL_ALPHA_OPAQUE),inFocus(false),sothing_request_focus(false),who_request_focus(NULL),mode_modal(false){
 		this->active_areaRELATIVE.Set_W(Screen.Get_W_Screen());
 		this->active_areaRELATIVE.Set_H(Screen.Get_H_Screen());
 		this->last_widget=this->handled_component.end();
@@ -62,6 +62,35 @@ public:			//INTERFACCIA UTENTE
 		/*Ritorna il numero di componenti aggregate a questo contenitore*/
 		return this->handled_component.size();
 	}
+
+	void SetModal(const bool setter){
+		/*Indica se il contenitore viene visualizzato in maniera modale.
+		Il ché indica che non può perdere focus, ammenoché non venga distrutto (metodo: UnLoad)*/
+		this->mode_modal=setter;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 protected:		//INTERFACCIA INTERNA
 	inline void Set_ActiveAreaRelative(const Rect& setter){		//l'active area è l'area del contenitore
 		this->active_areaRELATIVE=setter;						//dove possono essere visualizzati i componenti graficia aggregati
@@ -82,6 +111,8 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 		this->sothing_request_focus=false;
 		XG_Container* next_focus=NULL;
 		bool _first=true;
+		XG_Container* _tryCast;
+
 		for(it=this->handled_component.rbegin(); it!=this->handled_component.rend(); it++){
 			_current=(*it);
 
@@ -93,12 +124,17 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 			_current->SubDrawnableAreaTOTAL(this->active_areaRELATIVE + this->Get_AbsolutePosition());
 			/*---------------------------------------*/
 
-			/*Casting*/
-			XG_Container* _tryCast=XG_Container::TryCastIntoContainer_fromComponent(_current);
+			/*Casting e setteggio del focus interno*/
+			_tryCast=XG_Container::TryCastIntoContainer_fromComponent(_current);
 			if(_tryCast){
 				if(_first==true){
 					_tryCast->inFocus=true;
 					_first=false;
+					if(_tryCast->mode_modal==true){
+						next_focus=_tryCast;
+						this->sothing_request_focus=true;
+						this->who_request_focus=_current;
+					}
 				}else{
 					_tryCast->inFocus=false;
 				}
@@ -253,6 +289,7 @@ private:	//DATI INTERNI
 	bool sothing_request_focus;
 	ITERATORE last_widget;
 	XG_Component* who_request_focus;
+	bool mode_modal;
 };
 
 #endif
