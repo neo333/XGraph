@@ -28,3 +28,41 @@ void XG_Picture::UpDate_Animation_Alpha(void){
 		
 	}
 }
+
+
+
+
+
+
+void XG_Picture::Start_Move_Animation(const Point& move_to, const Uint32 delay){
+	this->anim_move_pointTO=move_to;
+	this->anim_move_pointSTART=this->Get_Position_Relative();
+	this->anim_move_delay=delay;
+	this->anim_move_process=true;
+	this->anim_move_time_to_start=SDL_GetTicks();
+}
+void XG_Picture::Stop_Move_Animation(void){
+	this->anim_move_process=false;
+}
+const bool XG_Picture::Is_Move_Animation_Progress(void) const{
+	return this->anim_move_process;
+}
+
+
+void XG_Picture::UpDate_Animation_Move(void){
+	if(this->anim_move_process){
+		Uint32 delay_elapse=SDL_GetTicks() - this->anim_move_time_to_start;
+		if(delay_elapse < this->anim_move_delay){
+			float percent=(float)(delay_elapse)/(float)(this->anim_move_delay);
+			float x_diff=(float)(this->anim_move_pointTO.Get_X()) - (float)(this->anim_move_pointSTART.Get_X());
+			float y_diff=(float)(this->anim_move_pointTO.Get_Y()) - (float)(this->anim_move_pointSTART.Get_Y());
+			x_diff*=percent;
+			y_diff*=percent;
+
+			this->Set_Position_Relative(this->anim_move_pointSTART + Point((int)(x_diff),(int)(y_diff)));
+		}else{
+			this->Set_Position_Relative(this->anim_move_pointTO);
+			this->anim_move_process=false;
+		}
+	}
+}

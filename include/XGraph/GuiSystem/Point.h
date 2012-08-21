@@ -60,6 +60,17 @@ public:		//OPERATORI
 		rts.y-=oth.y;
 		return rts;
 	}
+	inline void operator-=(const Point& oth){
+		this->x-=oth.x;
+		this->y-=oth.y;
+	}
+	template<class Type> inline Point operator*(const Type& oth) const{
+		return Point(this->x*oth,this->y*oth);
+	}
+	template<class Type> inline void operator*=(const Type& oth){
+		this->x*=oth;
+		this->y*=oth;
+	}
 
 
 

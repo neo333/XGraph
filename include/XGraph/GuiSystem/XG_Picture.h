@@ -5,7 +5,7 @@
 
 class XG_Picture: public XG_Component{
 public:		//COSTRUZIONE
-	XG_Picture(void):XG_Component(),load_parent_call(false),in_anim(false){
+	XG_Picture(void):XG_Component(),load_parent_call(false),in_anim(false),anim_move_process(false){
 
 	}
 
@@ -65,6 +65,32 @@ public:		//ANIMAZIONI
 	const bool Is_Alpha_Animation_Progress(void) const;
 
 
+	void Start_Move_Animation(const Point&, const Uint32);
+	void Stop_Move_Animation(void);
+	const bool Is_Move_Animation_Progress(void) const;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 protected:	//CONTROLLO&DISEGNO
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
@@ -96,6 +122,14 @@ private:	//DATA
 	Uint8 alpha_anim_start;
 									//<<--------------------
 
+	Point anim_move_pointTO;		//<<-----animaizone move
+	Uint32 anim_move_delay;
+	bool anim_move_process;
+	Uint32 anim_move_time_to_start;
+	Point anim_move_pointSTART;
+									//<<--------------------
+
+
 private:	//METODI INTERNI DI SUPPORTO
 	inline void UpDateMetricImage(void){
 		this->Set_AreaGrappableRelative(Rect(Point(0,0),this->Get_W(),this->Get_H()));
@@ -103,8 +137,10 @@ private:	//METODI INTERNI DI SUPPORTO
 
 	inline void UpDateAnimationTotal(void){
 		this->UpDate_Animation_Alpha();
+		this->UpDate_Animation_Move();
 	}
 	void UpDate_Animation_Alpha(void);
+	void UpDate_Animation_Move(void);
 };
 
 #endif
