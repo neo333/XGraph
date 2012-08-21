@@ -5,6 +5,7 @@
 #include <XGraph/GuiSystem/Image.h>		//uhmm.. un pò troppo a basso livello!
 #include <XGraph/InputSystem/Gestore_Input.h>
 #include <XGraph/GuiSystem/XG_GuiSystem.h>
+#include <XGraph/GuiSystem/XGraphSettings.h>
 
 //--CONTENITORI--
 #include <XGraph/GuiSystem/XG_Screen.h>

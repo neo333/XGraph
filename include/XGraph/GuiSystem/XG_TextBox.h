@@ -5,6 +5,7 @@
 #include <XGraph/GuiSystem/XG_FontSys.h>
 #include <SDL/SDL_gfxPrimitives.h>
 #include <XGraph/InputSystem/Tastiera.h>
+#include <XGraph/GuiSystem/XG_Container.h>
 
 class XG_TextBox: public XG_Component{
 public:		//COSTRUTTORE
@@ -77,7 +78,7 @@ public:		//METODI SET&GET
 
 protected:	//CONTROLLO & DISEGNO
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
-		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true){
+		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true && this->Get_Container()->Is_InFocus()==true){
 			this->pos_cursore=this->data.Get_Text().size();
 			this->active=true;
 			return true;

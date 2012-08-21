@@ -42,12 +42,6 @@ public:		//INTERFACCIA CLIENT
 
 
 
-
-
-
-
-
-
 private:	//FUNZIONI GESTIONE INTERNE
 	const bool UpDateAllInput(void);
 	void CheckDynamicComponent(void);

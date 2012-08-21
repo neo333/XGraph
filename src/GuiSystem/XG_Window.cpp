@@ -21,6 +21,7 @@ void XG_Window::UnLoad(void){
 }
 
 const bool XG_Window::UpDateRender(void){
+	Uint8 _alpha_mem=this->render.Get_Alpha();
 	Texture source_render;
 	if(source_render.Load_fromMemory(win_res_png,win_res_png_size,true)==false){
 		return false;
@@ -28,5 +29,6 @@ const bool XG_Window::UpDateRender(void){
 	if(XG_Component::CompositeObjectGraphic(source_render,XG_Window::w_corner,XG_Window::h_corner,this->w,this->h,this->render)==false){
 		return false;
 	}
+	this->render.Set_Alpha(_alpha_mem);
 	return true;
 }

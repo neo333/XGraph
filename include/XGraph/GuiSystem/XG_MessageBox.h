@@ -4,6 +4,7 @@
 #include <XGraph/GuiSystem/XG_Window.h>
 #include <XGraph/GuiSystem/XG_Label.h>
 #include <XGraph/GuiSystem/XG_Button.h>
+#include <XGraph/GuiSystem/XGraphSettings.h>
 
 enum XGRAPH_MESSAGEBOX_TYPE{
 	XGRAPH_MESSAGEBOX_TYPE_NORMAL,
@@ -25,6 +26,9 @@ public:
 		XG_Container::SetModal(true);
 		XG_Window::Load();
 		XG_Window::SetSize(480,180);
+		if(XGraphSettings::Get_Instance().Is_AlphaLibrary()==true){
+			this->SetAlpha(XGraphSettings::Get_Instance().Get_AlphaLibrary());
+		}
 		XG_Window::SetTextTitle(init_title);
 		this->Set_Position_Relative(Point(OutVideo::Get_Instance().Get_W_Screen()/2 - this->Get_W()/2,OutVideo::Get_Instance().Get_H_Screen()/2 - this->Get_H()/2));
 
