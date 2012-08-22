@@ -110,6 +110,7 @@ public:		//METODI SET/GET
 				this->last_error="Impossibile eseguire il ridimensionamento dell'immagine richiesta";
 				return false;
 			}
+			temp.Set_ColorKey(this->_intSurface.Get_ColorKey());
 			this->_intSurface=temp;
 		}
 		this->SetCutArea(Rect(Point(0,0),wset,hset));

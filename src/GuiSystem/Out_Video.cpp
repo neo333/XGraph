@@ -30,12 +30,14 @@ const bool OutVideo::Check_SDLINIT(void){
 void OutVideo::OpenSDL_FORCE(void){
 	if(OutVideo::Check_SDLINIT()==false){
 		SDL_Init(OutVideo::sdl_flag_need);
+		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);
 		TTF_Init();
 	}
 }
 void OutVideo::CloseSDL_FORCE(void){
 	if(OutVideo::Check_SDLINIT()==true){
 		TTF_Quit();
+		IMG_Quit();
 		SDL_Quit();
 	}
 }
@@ -47,6 +49,9 @@ bool OutVideo::Create_Window(const Setting_Window& set){
 	Uint32 flag=SDL_HWSURFACE | SDL_ANYFORMAT | SDL_DOUBLEBUF;
 	if(set.fullscreen){
 		flag=flag | SDL_FULLSCREEN;
+	}
+	if(set.frame==false){
+		flag=flag | SDL_NOFRAME;
 	}
 	this->_screen=SDL_SetVideoMode(set.width,set.height,set.bpp,flag);
 	if(this->_screen.Is_Load()==false){

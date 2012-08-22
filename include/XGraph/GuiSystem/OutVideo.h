@@ -5,13 +5,14 @@
 #include <cassert>
 
 struct Setting_Window{
-	int width;
-	int height;
-	int bpp;
-	bool fullscreen;
+	const int width;
+	const int height;
+	const int bpp;
+	const bool fullscreen;
+	const bool frame;
 
-	Setting_Window(const int& w_loc, const int& h_loc, const int& bpp_loc, const bool& f_loc):width(w_loc),
-		height(h_loc),bpp(bpp_loc),fullscreen(f_loc){
+	Setting_Window(const int w_loc, const int h_loc, const int bpp_loc, const bool f_loc, const bool init_frame=true):width(w_loc),
+		height(h_loc),bpp(bpp_loc),fullscreen(f_loc),frame(init_frame){
 
 	}
 };

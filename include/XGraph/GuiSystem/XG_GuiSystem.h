@@ -82,7 +82,6 @@ private:	//SINGLETON REALIZZAZIONE
 };
 
 #define GuiSystem XG_GuiSystem::Get_Instance()
-#define NewComponent(X) XG_GuiSystem::Get_Instance().RegistraComponenteDinamico(X,__FILE__,__LINE__)
 
 
 #endif

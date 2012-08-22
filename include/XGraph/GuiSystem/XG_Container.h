@@ -155,8 +155,8 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 		}
 
 		/*Porto il contenitore richiedente di focus in prima posizione nel vettore*/
-		XG_Component* _afterBack = this->handled_component.back();
 		if(next_focus!=NULL){
+			XG_Component* _afterBack = this->handled_component.back();
 			if(next_focus!=_afterBack){
 				ITERATORE it;
 				if(this->Find_Obj(next_focus,it)==true){

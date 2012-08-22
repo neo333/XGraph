@@ -58,6 +58,10 @@ public:		//METODI SET&GET
 	virtual const int Get_H(void) const{
 		return this->h;
 	}
+	const std::string& Get_Text(void) const{
+		return this->data.Get_Text();
+	}
+
 	virtual void SetAlpha(const Uint8 setter){
 		this->render_back.Set_Alpha(setter);
 	}

@@ -31,7 +31,7 @@ esegue il blit finale dello schermo a video*/
 #define XGRAPH_MAIN_LOOP_run()	\
 			SysInput.UpDateAll();		\
 			GuiSystem.Run();			\
-			Screen.UpDateScreen();	
+			Screen.UpDateScreen()	
 
 
 
@@ -50,12 +50,12 @@ sul quale esegue l'azione della funzione*/
 
 /*Crea un nuovo MessageBox di tipo NORMAL*/
 #define New_MessageBox(TITLE,MESSAGE) \
-			NewComponent(new XG_MessageBox(TITLE,MESSAGE,XGRAPH_MESSAGEBOX_TYPE_NORMAL,NULL));
+			NewComponent(new XG_MessageBox(TITLE,MESSAGE,XGRAPH_MESSAGEBOX_TYPE_NORMAL,NULL))
 
 /*Crea un nuovo MessageBox di tipo definito dall'utente, specificando il puntatore di memoria
 dove memorizzare il risultato del messagebox*/
 #define New_MessageBox_plus(TITLE,MESSAGE,TYPE,RESULT_POINTER) \
-			NewComponent(new XG_MessageBox(TITLE,MESSAGE,TYPE,RESULT_POINTER));
+			NewComponent(new XG_MessageBox(TITLE,MESSAGE,TYPE,RESULT_POINTER))
 
 
 
@@ -83,6 +83,31 @@ tutti i controlli e il disegno*/
 		XGRAPH_MAIN_LOOP_run();										\
 	}
 
+
+
+
+
+/*Registra un componente dinamico (caricato in area heap della memoria).
+Tramite questa funzione non sarà necessario preoccuparsi della deallocazione della memoria, sicché sarà
+il sistema stesso, automaticamente, ad deallocarla appena il componente sarà 'de-caricato' (UNLOAD)*/
+#define NewComponent(X) XG_GuiSystem::Get_Instance().RegistraComponenteDinamico(X,__FILE__,__LINE__)
+
+
+
+
+
+/*Inizializza le librerie SDL necessarie per il sistema. Ricordarsi di chiuderle una volta terminata
+l'applicazione*/
+#define XGRAPH_INIT_SDL()																	\
+		SDL_Init(SDL_INIT_TIMER| SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_EVENTTHREAD);	\
+		IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF);								\
+		TTF_Init()																			
+
+/*Chiude le librerie SDL inizializzate in precedenza. Dealloca le risorse utilizzate.*/
+#define XGRAPH_CLOSE_SDL()	\
+		TTF_Quit();	\
+		IMG_Quit();	\
+		SDL_Quit()	\
 //----------------------------------------------
 
 #endif
