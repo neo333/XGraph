@@ -102,7 +102,9 @@ public:		//METODI SET/GET
 		return this->_alpha;
 	}
 
-	/*Ridimensiona un'immagine. L'area di CUT (taglio) verrà resettata!*/
+	/*Ridimensiona un'immagine. L'area di CUT (taglio) verrà resettata!
+	NOTA BENE: attualmente (versione corrente) l'algoritmo di ridimensionamento
+	pare non tener conto dei pixel 'trasparenti' (colorkey)*/
 	const bool ResizeImage(const int& wset, const int& hset){
 		if(this->_intSurface.Is_Load()){
 			Texture temp=SDL_Resize(this->_intSurface, wset, hset,false);
@@ -110,7 +112,6 @@ public:		//METODI SET/GET
 				this->last_error="Impossibile eseguire il ridimensionamento dell'immagine richiesta";
 				return false;
 			}
-			temp.Set_ColorKey(this->_intSurface.Get_ColorKey());
 			this->_intSurface=temp;
 		}
 		this->SetCutArea(Rect(Point(0,0),wset,hset));
