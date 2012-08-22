@@ -28,7 +28,7 @@ public:		//INTERFACCIA UTENTE
 		this->render_on.UnLoad();
 		XG_Component::UnLoad();
 	}
-	void SetSize(const int w_size,const int h_size){
+	void SetSize(const int w_size =150,const int h_size =-1){
 		this->w=w_size;
 		this->h=h_size;
 		if(this->w==-1){

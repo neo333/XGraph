@@ -34,6 +34,13 @@ public:		//LOADING
 		this->UpDateMetricImage();
 		return status;
 	}
+	const bool LoadImage_fromTexture(const Texture& text){
+		assert(this->load_parent_call);
+		this->Load(const_cast<XG_Container*>(this->Get_Container()));
+		this->data=text;
+		this->UpDateMetricImage();
+		return true;
+	}
 	virtual const bool Load(XG_Container* handle=NULL){
 		this->load_parent_call=true;
 		return XG_Component::Load(handle);
@@ -56,6 +63,9 @@ public:		//METODI GET&SET
 	void ResizeImage(const int new_w, const int new_h){
 		this->data.ResizeImage(new_w,new_h);
 		this->UpDateMetricImage();
+	}
+	void SetColorKey(const Color& setter){
+		this->data.Set_ColorKey(setter);
 	}
 
 

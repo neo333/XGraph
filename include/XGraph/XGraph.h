@@ -41,7 +41,7 @@ esegue il blit finale dello schermo a video*/
 /*'Ritorna' (creando) un nuovo oggetto 'EVENTO' da inserire nei controlli dei widget.
 Richiede un puntatore a funzione, il puntatore del componente chiamante e il puntatore dell'oggetto
 sul quale esegue l'azione della funzione*/
-#define NEWEVENT(FUNZ,CALLER,OPERAND) XG_Event<XG_Component>(FUNZ,CALLER,OPERAND)
+#define XGRAPH_NEWEVENT(FUNZ,CALLER,OPERAND) XG_Event<XG_Component>(FUNZ,CALLER,OPERAND)
 
 
 
@@ -49,13 +49,13 @@ sul quale esegue l'azione della funzione*/
 
 
 /*Crea un nuovo MessageBox di tipo NORMAL*/
-#define New_MessageBox(TITLE,MESSAGE) \
-			NewComponent(new XG_MessageBox(TITLE,MESSAGE,XGRAPH_MESSAGEBOX_TYPE_NORMAL,NULL))
+#define XGRAPH_New_MessageBox(TITLE,MESSAGE) \
+			XGRAPH_NewComponent(new XG_MessageBox(TITLE,MESSAGE,XGRAPH_MESSAGEBOX_TYPE_NORMAL,NULL))
 
 /*Crea un nuovo MessageBox di tipo definito dall'utente, specificando il puntatore di memoria
 dove memorizzare il risultato del messagebox*/
-#define New_MessageBox_plus(TITLE,MESSAGE,TYPE,RESULT_POINTER) \
-			NewComponent(new XG_MessageBox(TITLE,MESSAGE,TYPE,RESULT_POINTER))
+#define XGRAPH_New_MessageBox_plus(TITLE,MESSAGE,TYPE,RESULT_POINTER) \
+			XGRAPH_NewComponent(new XG_MessageBox(TITLE,MESSAGE,TYPE,RESULT_POINTER))
 
 
 
@@ -90,7 +90,7 @@ tutti i controlli e il disegno*/
 /*Registra un componente dinamico (caricato in area heap della memoria).
 Tramite questa funzione non sarà necessario preoccuparsi della deallocazione della memoria, sicché sarà
 il sistema stesso, automaticamente, ad deallocarla appena il componente sarà 'de-caricato' (UNLOAD)*/
-#define NewComponent(X) XG_GuiSystem::Get_Instance().RegistraComponenteDinamico(X,__FILE__,__LINE__)
+#define XGRAPH_NewComponent(X) XG_GuiSystem::Get_Instance().RegistraComponenteDinamico(X,__FILE__,__LINE__)
 
 
 

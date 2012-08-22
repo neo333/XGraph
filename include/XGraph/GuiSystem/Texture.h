@@ -253,22 +253,22 @@ private:		//FUNZIONI MEMBRO PRIVATE E DATA
 				this->last_error="Impossibile caricare la risorsa texture richiesta.\n";
 				this->last_error+=IMG_GetError();
 			}else{
-				this->mp_surface=SDL_DisplayFormatAlpha(buf_temp);
+				if(trasp_key==true){
+					if(SDL_SetColorKey(buf_temp,SDL_RLEACCEL | SDL_SRCCOLORKEY,buf_temp->format->colorkey)!=0){
+						this->last_error="Impossibile ottimizzare la risorsa texture richiesta tramite RLEACCEL.\n";
+						this->last_error+=SDL_GetError();
+						return false;
+					}
+				}
+				this->mp_surface=SDL_DisplayFormat(buf_temp);
 				SDL_FreeSurface(buf_temp);
 				buf_temp=NULL;
 				if(this->mp_surface==NULL){
 					this->last_error="Impossibile ottimizzare la risorsa texture richiesta.\n";
 					this->last_error+=SDL_GetError();
-				}else{
-					if(trasp_key){
-						if(SDL_SetColorKey(this->mp_surface,SDL_RLEACCEL | SDL_SRCCOLORKEY,this->mp_surface->format->colorkey)!=0){
-							this->last_error="Impossibile ottimizzare la risorsa texture richiesta tramite RLEACCEL.\n";
-							this->last_error+=SDL_GetError();
-							return false;
-						}
-					}
-					return true;
+					return false;
 				}
+				return true;
 			}
 		}
 		return false;
