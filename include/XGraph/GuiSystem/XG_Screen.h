@@ -23,7 +23,9 @@ public:		//INTERFACCIA COMPONENT
 
 public:		//INTERFACCIA COMPONENT (PRIVATA)
 	virtual const bool Check_Focus(const XG_Event_Input& _event){
-		return XG_Container::Check_Focus(_event);
+		if(XG_Container::Check_Focus(_event)==true) return true;
+		if(_event==true) return true;
+		return false;
 	}
 
 public:		//SINGLETON ACCESS

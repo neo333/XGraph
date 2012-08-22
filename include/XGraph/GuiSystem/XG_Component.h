@@ -82,24 +82,32 @@ protected:	//CONTROLLO & DISEGNO
 
 				Questa funzione verrà chiamata SEMPRE a RUN-LOOP!
 		*/
-		if(moveable==true){
+		if(this->moveable==true){
 			if(this->agganciato==true){
+				this->why_request_focus=MOVING;
 				return true;
 			}else{
 				if(_event._mousepress.bottone==XG_Event_Input::LEFT && XG_Component::Mouse_inArea(this->area_grappable + this->Get_AbsolutePosition())){
-					this->agganciato_point.Set_X(Mouse::Get_Instance().Get_X());
-					this->agganciato_point.Set_Y(Mouse::Get_Instance().Get_Y());
-					this->agganciato=true;
+					this->why_request_focus=MEM_GRAPPABLE;
 					return true;
 				}
-			}
+		}
 		}else{
 			this->agganciato=false;
 		}
 		return false;
 	}
 	virtual void Exeque_Controll(const XG_Event_Input& _event){
-		this->UpDateTrascinamento(_event);
+		switch(this->why_request_focus){
+		case MEM_GRAPPABLE:
+			this->agganciato_point.Set_X(Mouse::Get_Instance().Get_X());
+			this->agganciato_point.Set_Y(Mouse::Get_Instance().Get_Y());
+			this->agganciato=true;
+			break;
+		case MOVING:
+			this->UpDateTrascinamento(_event);
+			break;
+		}
 	}
 	virtual const bool Drawn_Component(void) =0;		//Funzione di disegno chiamato a RUN-LOOP
 														//sempre, ammenoché la visibilità dell'oggetto sia 'FALSE'
@@ -177,6 +185,11 @@ private:		//DATI PRIVATI
 	bool agganciato;
 	Point agganciato_point;
 	bool force_close;
+
+	enum WHY_FOCUS{
+		MEM_GRAPPABLE,
+		MOVING
+	}why_request_focus;
 };
 
 #endif
