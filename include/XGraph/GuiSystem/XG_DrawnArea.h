@@ -6,6 +6,7 @@
 class XG_DrawnArea: public XG_Container{
 public:		//COSTRUZIONE
 	XG_DrawnArea(const Rect& init_area =Rect()):XG_Container(){
+		this->Set_NoPriority(true);
 		this->Set_Area(init_area);
 	}
 

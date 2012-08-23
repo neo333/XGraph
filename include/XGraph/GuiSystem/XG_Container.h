@@ -8,7 +8,7 @@ class XG_GuiSystem;
 
 class XG_Container: public XG_Component{
 public:			//COSTRUTTORE
-	XG_Container(void):XG_Component(),is_root(false),_alphaMEM(SDL_ALPHA_OPAQUE),inFocus(false),sothing_request_focus(false),who_request_focus(NULL),mode_modal(false){
+	XG_Container(void):XG_Component(),is_root(false),_alphaMEM(SDL_ALPHA_OPAQUE),inFocus(false),sothing_request_focus(false),who_request_focus(NULL),mode_modal(false),no_priority_drawn(false){
 		this->active_areaRELATIVE.Set_W(Screen.Get_W_Screen());
 		this->active_areaRELATIVE.Set_H(Screen.Get_H_Screen());
 		this->last_widget=this->handled_component.end();
@@ -67,6 +67,11 @@ public:			//INTERFACCIA UTENTE
 		/*Indica se il contenitore viene visualizzato in maniera modale.
 		Il ché indica che non può perdere focus, ammenoché non venga distrutto (metodo: UnLoad)*/
 		this->mode_modal=setter;
+	}
+
+	void Set_NoPriority(const bool setter){
+		/*TODO: fare commento!*/
+		this->no_priority_drawn=setter;
 	}
 
 
@@ -178,24 +183,7 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 			XG_Component::Exeque_Controll(_event);
 		}
 	}
-	virtual const bool Drawn_Component(void){
-		ITERATORE it;
-		bool status=true;
-		XG_Component* cursor;
-		for(it=this->handled_component.begin(); it!=this->handled_component.end(); it++){
-			cursor=(*it);
-			if(cursor->visible==true){
-				if(cursor->Drawn_Component()==false){
-					this->AddError_toLOG(cursor->Get_LogError());
-					status=false;
-				}
-			}
-		}
-		if(XG_Component::Drawn_Component()==false){
-			status=false;
-		}
-		return status;
-	}
+	virtual const bool Drawn_Component(void);
 
 
 
@@ -290,6 +278,7 @@ private:	//DATI INTERNI
 	ITERATORE last_widget;
 	XG_Component* who_request_focus;
 	bool mode_modal;
+	bool no_priority_drawn;
 };
 
 #endif
