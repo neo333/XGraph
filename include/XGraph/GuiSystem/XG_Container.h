@@ -173,13 +173,10 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 	}
 	virtual void Exeque_Controll(const XG_Event_Input& _event){
 		if(this->sothing_request_focus==true){
-			//this->handled_component.back()->Exeque_Controll(_event);
 			this->who_request_focus->Exeque_Controll(_event);
 		}else{
 			XG_Component::Exeque_Controll(_event);
 		}
-		
-		//TODO: forse bisognerebbe fare che il controllo del contenitore si esegue se non ci sono controlli interni!
 	}
 	virtual const bool Drawn_Component(void){
 		ITERATORE it;
@@ -193,6 +190,9 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 					status=false;
 				}
 			}
+		}
+		if(XG_Component::Drawn_Component()==false){
+			status=false;
 		}
 		return status;
 	}

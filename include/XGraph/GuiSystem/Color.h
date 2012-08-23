@@ -43,6 +43,10 @@ public:
 		}
 		return true;
 	}
+
+	Color operator+(const Color& oth) const{
+		return Color(this->r+oth.r, this->g+oth.g, this->b+oth.b);
+	}
 };
 
 #endif

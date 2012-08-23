@@ -11,7 +11,7 @@ enum XGRAP_MODE_RENDER_TEXT{
 
 class Text: public Image{
 public:
-	Text(const std::string& init_text =std::string(),const Color& init_color =Color()):Image(),prtFont(NULL),mode_style(XGRAP_MODE_RENDER_TEXT_FAST),mycolor(init_color),
+	Text(const std::string& init_text =std::string(),const Color& init_color =Color()):Image(),text(init_text),prtFont(NULL),mode_style(XGRAP_MODE_RENDER_TEXT_FAST),mycolor(init_color),
 		w_text(0),h_text(0),cryp_mode(false){
 
 	}

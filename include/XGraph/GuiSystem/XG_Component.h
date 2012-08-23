@@ -6,13 +6,14 @@
 #include <XGraph/GuiSystem/Text.h>
 #include <XGraph/GuiSystem/XG_Event_Input.h>
 #include <XGraph/InputSystem/Mouse.h>
+#include <XGraph/GuiSystem/XG_ContextMenu.h>
 
 class XG_Container;
 class XG_GuiSystem;
 
 class XG_Component{
 public:		//COSTRUTTORE & DISTRUTTORE
-	XG_Component(void):xgContainer_handler(NULL),moveable(false),agganciato(false),force_close(false){
+	XG_Component(void):xgContainer_handler(NULL),moveable(false),agganciato(false),force_close(false),display_contextmenu(false){
 		this->Set_Visibile(true);
 	}
 	virtual ~XG_Component(void){
@@ -48,6 +49,13 @@ public:		//INTERFACCIA	UTENTE
 	}
 	inline const XG_Container* Get_Container(void) const{
 		return this->xgContainer_handler;
+	}
+
+	void Set_ContextMenu(const XG_ContextMenu& setter){
+		this->mycontextmenu=setter;
+	}
+	const XG_ContextMenu& Get_ContextMenu(void) const{
+		return this->mycontextmenu;
 	}
 
 	/*Ritorna 'true' se l'oggetto si trova in un CONTAINER (contenitore) che è in focus,
@@ -95,6 +103,15 @@ protected:	//CONTROLLO & DISEGNO
 		}else{
 			this->agganciato=false;
 		}
+
+		if(_event._mouseclic.bottone==XG_Event_Input::RIGHT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H())-this->Get_DrawnableAreaAbsolute())==true && this->mycontextmenu.Get_Number_Label()>0){
+			this->why_request_focus=REQUEST_CONTEXT_MENU;
+			return true;
+		}
+		if(_event==true){
+			this->display_contextmenu=false;
+		}
+
 		return false;
 	}
 	virtual void Exeque_Controll(const XG_Event_Input& _event){
@@ -103,13 +120,19 @@ protected:	//CONTROLLO & DISEGNO
 			this->agganciato_point.Set_X(Mouse::Get_Instance().Get_X());
 			this->agganciato_point.Set_Y(Mouse::Get_Instance().Get_Y());
 			this->agganciato=true;
+			this->display_contextmenu=false;
 			break;
 		case MOVING:
 			this->UpDateTrascinamento(_event);
+			this->display_contextmenu=false;
+			break;
+		case REQUEST_CONTEXT_MENU:
+			this->display_contextmenu=true;
+			this->xy_display_contextmenu=_event._mouseclic.xy;
 			break;
 		}
 	}
-	virtual const bool Drawn_Component(void) =0;		//Funzione di disegno chiamato a RUN-LOOP
+	virtual const bool Drawn_Component(void);		//Funzione di disegno chiamato a RUN-LOOP
 														//sempre, ammenoché la visibilità dell'oggetto sia 'FALSE'
 
 protected:	//DATI INTERNI
@@ -164,6 +187,7 @@ protected:		//FUNZIONI STATICHE DI SUPPORTO
 		return false;
 	}
 private:		//DATI PRIVATI
+	friend class XG_ContextMenu;
 	friend class XG_Container;
 	friend class XG_GuiSystem;
 	bool visible;
@@ -188,8 +212,16 @@ private:		//DATI PRIVATI
 
 	enum WHY_FOCUS{
 		MEM_GRAPPABLE,
-		MOVING
+		MOVING,
+		REQUEST_CONTEXT_MENU
 	}why_request_focus;
+
+
+	/***d. contextmenu*/
+	XG_ContextMenu mycontextmenu;
+	bool display_contextmenu;
+	Point xy_display_contextmenu;
+	/******************/
 };
 
 #endif

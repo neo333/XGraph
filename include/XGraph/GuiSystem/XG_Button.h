@@ -131,7 +131,7 @@ protected:	//DISEGNO&CONTROLLO
 			this->AddError_toLOG(this->label_on_button.Get_LastError());
 			return false;
 		}
-		return true;
+		return XG_Component::Drawn_Component();
 	}
 
 private:	//DATA
