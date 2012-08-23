@@ -10,6 +10,7 @@
 //--CONTENITORI--
 #include <XGraph/GuiSystem/XG_Screen.h>
 #include <XGraph/GuiSystem/XG_Window.h>
+#include <XGraph/GuiSystem/XG_DrawnArea.h>
 //--------------
 
 //---WIDGETS----
