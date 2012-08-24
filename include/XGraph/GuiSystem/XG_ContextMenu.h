@@ -8,10 +8,10 @@
 #include <XGraph/InputSystem/Mouse.h>
 
 class XG_GuiSystem;
-typedef std::vector<std::string> VETT_STRINGS;
 
 class XG_ContextMenu{
 public:		//COSTRUZIONE
+	typedef std::vector<std::string> VETT_STRINGS;
 	XG_ContextMenu(const VETT_STRINGS& lista_argomenti = VETT_STRINGS()):argomenti(lista_argomenti),loaded(false){
 
 	}
