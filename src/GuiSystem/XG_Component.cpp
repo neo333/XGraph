@@ -1,6 +1,7 @@
 #include <XGraph/GuiSystem/XG_Component.h>
 #include <XGraph/GuiSystem/XG_Container.h>
 #include <XGraph/GuiSystem/XG_Screen.h>
+#include <XGraph/GuiSystem/XG_GuiSystem.h>
 
 /*		
 
@@ -141,9 +142,8 @@ const bool XG_Component::Object_onTop(void) const{
 }
 
 const bool XG_Component::Drawn_Component(void){
-	bool status=true;
 	if(this->display_contextmenu==true){
-		this->mycontextmenu.Drawn(this->xy_display_contextmenu);
+		XG_GuiSystem::Get_Instance().DisegnaContextMenu(&this->mycontextmenu,this->xy_display_contextmenu);
 	}
-	return status;
+	return true;
 }

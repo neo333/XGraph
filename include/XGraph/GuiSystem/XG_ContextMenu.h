@@ -7,6 +7,7 @@
 #include <string>
 #include <XGraph/InputSystem/Mouse.h>
 
+class XG_GuiSystem;
 typedef std::vector<std::string> VETT_STRINGS;
 
 class XG_ContextMenu{
@@ -23,9 +24,6 @@ public:		//COSTRUZIONE
 		this->argomenti_render.clear();
 		return *this;
 	}
-
-public:		//DISEGNO
-	const bool Drawn(const Point&);
 
 public:		//GET&SET
 	const Sint16 Get_W(void) const{
@@ -50,6 +48,11 @@ public:		//OPERATORI
 
 
 
+
+
+private:		//DISEGNO
+	friend class XG_GuiSystem;
+	const bool Drawn(const Point&);
 
 
 

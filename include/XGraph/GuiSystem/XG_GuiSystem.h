@@ -3,6 +3,7 @@
 
 #include <XGraph/GuiSystem/XG_Event_Input.h>
 #include <XGraph/GuiSystem/XG_Container.h>
+#include <XGraph/GuiSystem/XG_ContextMenu.h>
 #include <cassert>
 #include <map>
 
@@ -40,7 +41,12 @@ public:		//INTERFACCIA CLIENT
 
 
 
-
+private:	//FUNZIONI ESTERNE DEL SISTEMA
+	friend const bool XG_Component::Drawn_Component(void);
+	void DisegnaContextMenu(XG_ContextMenu* setter, const Point& xy){
+		this->last_context_menu_to_drawn=setter;
+		this->xy_last_context_menu_to_drawn=xy;
+	}
 
 private:	//FUNZIONI GESTIONE INTERNE
 	const bool UpDateAllInput(void);
@@ -52,6 +58,8 @@ private:	//DATA
 	bool m_right_but;
 	bool m_middle_but;
 	std::string _last_error;
+	XG_ContextMenu* last_context_menu_to_drawn;
+	Point xy_last_context_menu_to_drawn;
 	
 	struct info_Component_add{
 		XG_Component* handle;

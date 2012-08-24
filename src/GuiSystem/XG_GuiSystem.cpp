@@ -77,6 +77,7 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 
 const bool XG_GuiSystem::Run(void){
 	this->_last_error.clear();
+	this->last_context_menu_to_drawn=NULL;
 
 	this->UpDateAllInput();
 
@@ -88,8 +89,16 @@ const bool XG_GuiSystem::Run(void){
 	}
 
 	if(_screenpnt->Drawn_Component()==false){
-		this->_last_error=_screenpnt->Get_LogError();
+		this->_last_error+=_screenpnt->Get_LogError();
+		this->_last_error+="\n";
 		return false;
+	}
+
+	if(this->last_context_menu_to_drawn){
+		if(this->last_context_menu_to_drawn->Drawn(this->xy_last_context_menu_to_drawn)==false){
+			this->_last_error+="Impossibile eseguire il disegno del componente grafico XG_ContextMenu\n";
+			return false;
+		}
 	}
 
 	if(Mouse::Get_Instance().skin_normal_loaded==true && (Mouse::Get_Instance().mode_load==false || Mouse::Get_Instance().skin_load_loaded==false)){
