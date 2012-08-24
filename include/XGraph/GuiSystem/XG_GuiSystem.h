@@ -20,7 +20,7 @@ public:		//INTERFACCIA CLIENT
 	VINCOLI: il componente registrato DEVE NECESSARIAMENTE essere allocato in memoria heap (dinamica!)*/
 	void RegistraComponenteDinamico(XG_Component* obj,const char* namefile, const long linefile){
 		if(obj){
-			this->dynamic_component.insert(std::pair<XG_Component*,info_Component_add>(obj,info_Component_add(namefile,linefile)));
+			this->dynamic_component.push_back(info_Component_add(obj,namefile,linefile));
 		}
 	}
 
@@ -54,15 +54,16 @@ private:	//DATA
 	std::string _last_error;
 	
 	struct info_Component_add{
-		const std::string namefile;
-		const long linefile;
-		info_Component_add(const std::string& _namefile, const long _line):namefile(_namefile),linefile(_line){
+		XG_Component* handle;
+		std::string namefile;
+		long linefile;
+		info_Component_add(XG_Component* const _handle,const std::string& _namefile, const long _line):handle(_handle),namefile(_namefile),linefile(_line){
 
 		}
 	};
-	typedef std::map<XG_Component*,info_Component_add> LISTA_DINAMICI;
+	typedef std::vector<info_Component_add> LISTA_DINAMICI;
 	typedef LISTA_DINAMICI::iterator ITERATORE_DINAMICI;
-	std::map<XG_Component*,info_Component_add> dynamic_component;
+	LISTA_DINAMICI dynamic_component;
 
 
 public:		//SINGLETON ACCESSO
