@@ -40,7 +40,7 @@ public:			//COSTRUTTORI
 
 public:		//METODI SET/GET
 	/*Imposta il 'rettangolo di taglio' della texture. Praticamente l'immagine disegnata a video
-	sarà l'area espressa nel parametro della texture totale caricata.
+	sarï¿½ l'area espressa nel parametro della texture totale caricata.
 	Per valori di larghezza o altezza nulli verranno considerati quelli totali della texture*/
 	inline void SetCutArea(const Rect& setter =Rect()){
 		this->area_cut=setter;
@@ -60,7 +60,7 @@ public:		//METODI SET/GET
 		}
 	}
 
-	/*Imposta l'area dello schermo in cui avverrà il disegno dell'immagine in questione
+	/*Imposta l'area dello schermo in cui avverrï¿½ il disegno dell'immagine in questione
 	Le parti di immagine che si troveranno oltre l'area delimitata non verranno disegnate*/
 	inline void SetDrawnableArea(const Rect& setter){
 		this->area_vis=setter;
@@ -102,7 +102,7 @@ public:		//METODI SET/GET
 		return this->_alpha;
 	}
 
-	/*Ridimensiona un'immagine. L'area di CUT (taglio) verrà resettata!
+	/*Ridimensiona un'immagine. L'area di CUT (taglio) verrï¿½ resettata!
 	NOTA BENE: attualmente (versione corrente) l'algoritmo di ridimensionamento
 	pare non tener conto dei pixel 'trasparenti' (colorkey)*/
 	const bool ResizeImage(const int& wset, const int& hset){
@@ -235,7 +235,7 @@ public:		//CARICAMENTO
 		> const bool				->		true se l'operazione va a buonfile, altrimenti false.
 
 	NOTA:
-		L'immagine verrà caricata SEMPRE senza algoritmo di cifratura!
+		L'immagine verrï¿½ caricata SEMPRE senza algoritmo di cifratura!
 	*/
 	const bool Load_fromMemory(void* area_memory, const long& size_memory, const bool src_keycolor =true){
 		this->_alpha=SDL_ALPHA_OPAQUE;
@@ -252,7 +252,7 @@ public:		//CARICAMENTO
 
 
 
-	/*Ritorna true se l'immagine è correttamente caricata*/
+	/*Ritorna true se l'immagine ï¿½ correttamente caricata*/
 	const bool Is_Load(void) const{
 		return this->_intSurface.Is_Load();
 	}
@@ -274,7 +274,7 @@ public:		//CARICAMENTO
 
 public:			//FUNZIONI STATICHE AGGIUNTIVE
 
-	/*Ritorna 'true' se il punto del parametro è all'interno dell'area indicata dalla Rect*/
+	/*Ritorna 'true' se il punto del parametro ï¿½ all'interno dell'area indicata dalla Rect*/
 	static const bool Point_inArea(const Point& point, const Rect& area){
 		const Sint16& x_p=point.Get_X();
 		const Sint16& y_p=point.Get_Y();
@@ -309,6 +309,7 @@ public:			//FUNZIONI STATICHE AGGIUNTIVE
 		SDL_LockSurface(tex);
 		Image::_putpixel(tex,xy.Get_X(),xy.Get_Y(),pixel_in);
 		SDL_UnlockSurface(tex);
+		return true;
 	}
 
 

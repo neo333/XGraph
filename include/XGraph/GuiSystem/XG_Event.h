@@ -5,12 +5,8 @@
 
 
 template<class DATA> class XG_Event{
-public:		//DEFINITION_DATA
-	typedef void (*PFUN)(XG_Component*,DATA*);
-
 public:		//COSTRUTTORE
-	XG_Event(const PFUN funzione, XG_Component* caller, DATA* operand):funz_ctrl(funzione),
-		_whoCaller(caller),param(operand){
+	XG_Event(void (*funzione)(XG_Component*, DATA*), XG_Component* caller, DATA* operand):funz_ctrl(funzione),_whoCaller(caller),param(operand){
 
 	}
 
@@ -22,7 +18,7 @@ public:		//COSTRUTTORE
 		return false;
 	}
 private:	//DATA
-	const PFUN funz_ctrl;
+	void (*funz_ctrl)(XG_Component*, DATA*);
 	XG_Component* _whoCaller;
 	DATA* param;
 };

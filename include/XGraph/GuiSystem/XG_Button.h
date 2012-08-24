@@ -92,7 +92,7 @@ protected:	//DISEGNO&CONTROLLO
 	}
 	virtual void Exeque_Controll(const XG_Event_Input& _event){
 		if(this->call_focus==CLIC){
-			std::vector<XG_Event<XG_Component>>::iterator it;
+			std::vector<XG_Event<XG_Component> >::iterator it;
 			for(it=this->operation_on_lic.begin(); it!=this->operation_on_lic.end(); it++){
 				if((*it).Exe()==false){
 					this->AddError_toLOG("Impossibile eseguire un controllo sul widget specificato");
@@ -146,7 +146,7 @@ private:	//DATA
 	int w;
 	int h;
 	bool select;
-	std::vector<XG_Event<XG_Component>> operation_on_lic;
+	std::vector<XG_Event<XG_Component> > operation_on_lic;
 
 	static int w_corner;
 	static int h_corner;

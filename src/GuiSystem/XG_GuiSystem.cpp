@@ -106,12 +106,10 @@ const bool XG_GuiSystem::Run(void){
 
 void XG_GuiSystem::CheckDynamicComponent(void){
 	ITERATORE_DINAMICI it;
-	for(it=this->dynamic_component.begin(); it!=this->dynamic_component.end(); ){
+	for(it=this->dynamic_component.begin(); it!=this->dynamic_component.end(); it++){
 		if((*it).first->force_close==true){
 			delete (*it).first;
-			it=this->dynamic_component.erase(it);
-		}else{
-			it++;
+			this->dynamic_component.erase(it);
 		}
 	}
 }
