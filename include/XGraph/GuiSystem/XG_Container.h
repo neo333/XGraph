@@ -8,7 +8,7 @@ class XG_GuiSystem;
 
 class XG_Container: public XG_Component{
 public:			//COSTRUTTORE
-	XG_Container(void):XG_Component(),is_root(false),_alphaMEM(SDL_ALPHA_OPAQUE),inFocus(false),sothing_request_focus(false),who_request_focus(NULL),mode_modal(false),no_priority_drawn(false){
+	XG_Container(void):XG_Component(),is_root(false),_alphaMEM(SDL_ALPHA_OPAQUE),inFocus(false),sothing_request_focus(false),who_request_focus(NULL),mode_modal(false),no_priority_drawn(false),last_request_focus(false){
 		this->active_areaRELATIVE.Set_W(Screen.Get_W_Screen());
 		this->active_areaRELATIVE.Set_H(Screen.Get_H_Screen());
 		this->last_widget=this->handled_component.end();
@@ -46,6 +46,9 @@ public:			//INTERFACCIA UTENTE
 	}
 
 	inline const bool Is_InFocus(void) const{
+		/*Ritorna true se il contenitore è in focus o meno
+		NOTA BENE: il FOCUS non indica che il contenitore si trova come ultimo contenitore disegnato sullo schermo,
+		prevale (in disegno) su tutti*/
 		return this->inFocus;
 	}
 	virtual void UnLoad(void){
@@ -70,11 +73,14 @@ public:			//INTERFACCIA UTENTE
 	}
 
 	void Set_NoPriority(const bool setter){
-		/*TODO: fare commento!*/
+		/*Se questa flag è settata a 'TRUE' allora il componente non potrà prendere FOCUS (ossia non richiede priorità
+		di disegno: praticamente quando richiede il focus anche se concesso esso non si porta in primo piano)*/
 		this->no_priority_drawn=setter;
 	}
 
-
+	const bool Is_InLastRequestFocus(void) const{
+		return this->last_request_focus;
+	}
 
 
 
@@ -155,18 +161,22 @@ protected:		//INTERFACCIA COMPONTENT CONTRLL & DISEGNO
 				if(next_focus==NULL){
 					next_focus=_current->xgContainer_handler;
 				}
+				this->CancelLastReuquestFocus();
+				next_focus->last_request_focus=true;
 			}
 			/*--------------------------------------------------*/
 		}
 
 		/*Porto il contenitore richiedente di focus in prima posizione nel vettore*/
 		if(next_focus!=NULL){
-			XG_Component* _afterBack = this->handled_component.back();
-			if(next_focus!=_afterBack){
-				ITERATORE it;
-				if(this->Find_Obj(next_focus,it)==true){
-					this->handled_component.erase(it);
-					this->handled_component.push_back(next_focus);
+			if(next_focus->no_priority_drawn==false){
+				XG_Component* _afterBack = this->handled_component.back();
+				if(next_focus!=_afterBack){
+					ITERATORE it;
+					if(this->Find_Obj(next_focus,it)==true){
+						this->handled_component.erase(it);
+						this->handled_component.push_back(next_focus);
+					}
 				}
 			}
 		}
@@ -266,6 +276,7 @@ private:		//FUNZIONI DI SUPPORTO INTERNE
 		if(_out==this->handled_component.begin()) return false;
 		return true;
 	}
+	void CancelLastReuquestFocus(void);
 
 private:	//DATI INTERNI
 	friend class XG_Screen;
@@ -279,6 +290,7 @@ private:	//DATI INTERNI
 	XG_Component* who_request_focus;
 	bool mode_modal;
 	bool no_priority_drawn;
+	bool last_request_focus;
 };
 
 #endif

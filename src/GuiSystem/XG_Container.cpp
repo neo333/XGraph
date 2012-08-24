@@ -19,3 +19,13 @@ const bool XG_Container::Drawn_Component(void){
 	}
 	return status;
 }
+
+void XG_Container::CancelLastReuquestFocus(void){
+	ITERATORE it;
+	for(it=this->handled_component.begin(); it!=this->handled_component.end(); it++){
+		XG_Container* _cast=XG_Container::TryCastIntoContainer_fromComponent((*it));
+		if(_cast){
+			_cast->last_request_focus=false;
+		}
+	}
+}

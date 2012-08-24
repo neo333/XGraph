@@ -142,9 +142,6 @@ const bool XG_Component::Object_onTop(void) const{
 
 const bool XG_Component::Drawn_Component(void){
 	bool status=true;
-	if(this->Object_onTop()==false && this->display_contextmenu==true){
-		this->display_contextmenu=false;
-	}
 	if(this->display_contextmenu==true){
 		this->mycontextmenu.Drawn(this->xy_display_contextmenu);
 	}

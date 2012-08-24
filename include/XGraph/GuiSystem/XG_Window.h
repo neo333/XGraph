@@ -67,6 +67,9 @@ protected:	//INTERFACCIA CONTENITORE (PRIVATA)
 		if(_event._mouseclic.bottone==XG_Event_Input::LEFT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true){
 			status=true;
 		}
+		if(_event._mouseclic.bottone==XG_Event_Input::RIGHT && XG_Component::Point_inArea(_event._mouseclic.xy,Rect(this->Get_AbsolutePosition(),this->Get_W(),this->Get_H()))==true){
+			status=true;
+		}
 		return status;
 	}
 	virtual const bool Drawn_Component(void){
