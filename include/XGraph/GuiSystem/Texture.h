@@ -18,10 +18,10 @@ public:		//COSTRUTTORI E CARICAMENTO
 	
 	
 	
-	/*Crea una Texture vuota (che è, però, caricata!) (un rettangolo nero per intenderci)
-	Questo metodo di costruzione può risultare utile quando si deve
+	/*Crea una Texture vuota (che ï¿½, perï¿½, caricata!) (un rettangolo nero per intenderci)
+	Questo metodo di costruzione puï¿½ risultare utile quando si deve
 	creare una texture componendola di varie parti di altre textures.
-	Una volta creata la texture delle dimensioni richieste è possibile "sovrapporre" pezzi di texture precedentemente caricate
+	Una volta creata la texture delle dimensioni richieste ï¿½ possibile "sovrapporre" pezzi di texture precedentemente caricate
 	attraverso la funzione membro di questa classe apposita!*/
 	Texture(const int n_width, const int n_height);
 	
@@ -57,8 +57,8 @@ public:		//COSTRUTTORI E CARICAMENTO
 		La funzione 'true' se la texture viene caricata correttamente, altrimenti false.
 		
 	NOTE:
-		Questa funzione può essere chiamata solamente dopo aver avviato la finestra grafica dell'applicazione
-		altrimenti l'operazione di ottimizzazione bloccherà il processo*/
+		Questa funzione puï¿½ essere chiamata solamente dopo aver avviato la finestra grafica dell'applicazione
+		altrimenti l'operazione di ottimizzazione bloccherï¿½ il processo*/
 	const bool Load(const std::string& pathname, const std::string& filename, const bool src_trasparent=true){
 		this->Delete();
 		Page memory_add;
@@ -81,9 +81,9 @@ public:		//COSTRUTTORI E CARICAMENTO
 	/*Carica la texture da una risorsa immagine caricata precedentemente in memoria
 	NOTE:
 		Questa funzione effettua una COPIA dell'aria di memoria passata come parametro, quindi appena dopo il caricamento
-		potrà essere liberata a piacimento senza problemi
+		potrï¿½ essere liberata a piacimento senza problemi
 		
-		L'immagine verrà caricata SENZA (in ogni caso) algoritmo di cifratura!*/
+		L'immagine verrï¿½ caricata SENZA (in ogni caso) algoritmo di cifratura!*/
 	const bool Load_fromMemory(void* area_memory, const long& size_memory, const bool src_trasparent=true){
 		this->Delete();
 		return this->_load_from_memory(area_memory,size_memory,src_trasparent);
@@ -237,11 +237,10 @@ private:		//FUNZIONI MEMBRO PRIVATE E DATA
 	/*carica l'SDL_Surface interna dalla memoria
 	Ritorna true se l'immagine viene caricata ed ottimizzata correttamente.
 	la surface interna della classe deve essere liberata PRIMA di chiamare questa funzione!
-	NOTA BENE: La memoria di input può essere deallocata senza problemi sicché la surface verrà caricata in un'area
+	NOTA BENE: La memoria di input puï¿½ essere deallocata senza problemi sicchï¿½ la surface verrï¿½ caricata in un'area
 	di memoria separata!!
 	PS: definire trasp_key=true per caricare l'immagine con i pixel trasparenti direttamente dalla sorgente*/
 	const bool _load_from_memory(void* memory, const long& size, const bool trasp_key){
-		bool ok_status=false;
 		SDL_RWops* pMem=SDL_RWFromMem(memory, size);
 		if(pMem==NULL){
 			this->last_error="Area di memoria corrotta. Impossibile effettuare un'operazione di caricamento per la texture indicata.";

@@ -77,7 +77,6 @@ const bool XG_GuiSystem::UpDateAllInput(void){
 
 const bool XG_GuiSystem::Run(void){
 	this->_last_error.clear();
-	bool status=true;
 
 	this->UpDateAllInput();
 

@@ -10,7 +10,7 @@
 class Image{
 
 public:			//COSTRUTTORI
-	Image(const Point& pos_init=(0,0)):pos(pos_init),_alpha(SDL_ALPHA_OPAQUE),area_vis(Rect(Point(0,0),Screen.Get_W_Screen(),Screen.Get_H_Screen())){
+	Image(const Point& pos_init =Point(0,0)):pos(pos_init),_alpha(SDL_ALPHA_OPAQUE),area_vis(Rect(Point(0,0),Screen.Get_W_Screen(),Screen.Get_H_Screen())){
 
 	}
 	Image(const Image& oth):_intSurface(oth._intSurface),area_cut(oth.area_cut),pos(oth.pos),_alpha(oth._alpha),area_vis(oth.area_vis){
@@ -31,7 +31,7 @@ public:			//COSTRUTTORI
 		this->SetCutArea();
 		return *this;
 	}
-	Image(const Texture& _load, const Point& pos_init=(0,0)):_intSurface(_load),pos(pos_init),_alpha(SDL_ALPHA_OPAQUE),area_vis(Rect(Point(0,0),Screen.Get_W_Screen(),Screen.Get_H_Screen())){
+	Image(const Texture& _load, const Point& pos_init= Point(0,0)):_intSurface(_load),pos(pos_init),_alpha(SDL_ALPHA_OPAQUE),area_vis(Rect(Point(0,0),Screen.Get_W_Screen(),Screen.Get_H_Screen())){
 		this->SetCutArea();
 	}
 

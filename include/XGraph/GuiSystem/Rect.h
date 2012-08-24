@@ -7,7 +7,7 @@
 class Rect{
 
 public:		//COSTRUTTORI
-	Rect(const Point& start_coord=(0,0), const Sint16& w_param=0, const Sint16& h_param=0):_xy_(start_coord), w(w_param), h(h_param){
+	Rect(const Point& start_coord= Point(0,0), const Sint16& w_param=0, const Sint16& h_param=0):_xy_(start_coord), w(w_param), h(h_param){
 
 	}
 	Rect(const SDL_Rect& init):_xy_(init.x,init.y),w(init.w),h(init.h){
@@ -40,7 +40,7 @@ public:		//METODI SET&GET
 
 public:		//FUNZIONI AGGIUNTIVE STATICHE
 	/*Verifica se due Rect sono sovrapposte.
-	Ritorna 'true' se la condizione è verificata, altrimenti false*/
+	Ritorna 'true' se la condizione ï¿½ verificata, altrimenti false*/
 	inline static const bool Rect_Collide(const Rect& r1, const Rect& r2){
 		if(SDL_CollideBoundingBox(r1, r2)){
 			return true;
